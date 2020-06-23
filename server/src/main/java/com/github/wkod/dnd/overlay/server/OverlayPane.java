@@ -1,12 +1,12 @@
-package dnd.overlay.server;
+package com.github.wkod.dnd.overlay.server;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.github.wkod.dnd.overlay.server.appconfig.Configuration;
 import com.sun.glass.ui.Screen;
 
-import dnd.overlay.server.appconfig.Configuration;
 import javafx.scene.layout.Pane;
 
 public class OverlayPane extends Pane {

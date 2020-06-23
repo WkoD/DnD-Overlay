@@ -1,4 +1,4 @@
-package dnd.overlay.server;
+package com.github.wkod.dnd.overlay.server;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;

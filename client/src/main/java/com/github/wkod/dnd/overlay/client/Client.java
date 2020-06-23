@@ -1,4 +1,4 @@
-package dnd.overlay.client;
+package com.github.wkod.dnd.overlay.client;
 
 import javafx.application.Application;
 import javafx.stage.Stage;

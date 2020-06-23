@@ -1,4 +1,4 @@
-package dnd.overlay.server;
+package com.github.wkod.dnd.overlay.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

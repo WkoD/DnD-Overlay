@@ -1,6 +1,6 @@
-package dnd.overlay.client;
+package com.github.wkod.dnd.overlay.client;
 
-import dnd.overlay.client.appconfig.Configuration;
+import com.github.wkod.dnd.overlay.client.appconfig.Configuration;
 
 public class ClientApplication {
 

@@ -1,4 +1,4 @@
-package dnd.overlay.server;
+package com.github.wkod.dnd.overlay.client;
 
 import lombok.Data;
 

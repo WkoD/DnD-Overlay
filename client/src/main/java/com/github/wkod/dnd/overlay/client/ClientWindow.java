@@ -1,4 +1,4 @@
-package dnd.overlay.client;
+package com.github.wkod.dnd.overlay.client;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -16,7 +16,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.client.ClientConfig;
 
-import dnd.overlay.client.appconfig.Configuration;
+import com.github.wkod.dnd.overlay.client.appconfig.Configuration;
+
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;

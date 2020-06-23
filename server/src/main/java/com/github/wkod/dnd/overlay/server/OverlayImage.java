@@ -1,8 +1,9 @@
-package dnd.overlay.server;
+package com.github.wkod.dnd.overlay.server;
 
 import java.util.Objects;
 
-import dnd.overlay.server.appconfig.Configuration;
+import com.github.wkod.dnd.overlay.server.appconfig.Configuration;
+
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

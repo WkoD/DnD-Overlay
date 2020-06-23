@@ -1,4 +1,4 @@
-package dnd.overlay.server;
+package com.github.wkod.dnd.overlay.server;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
