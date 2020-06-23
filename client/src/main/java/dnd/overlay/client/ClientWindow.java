@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Base64;
 
 import javax.imageio.ImageIO;
 import javax.ws.rs.client.Client;
@@ -13,7 +14,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.glassfish.jersey.client.ClientConfig;
 
 import dnd.overlay.client.appconfig.Configuration;
@@ -183,7 +183,7 @@ public class ClientWindow extends Stage {
 				try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
 					ImageIO.write(bimage, "png", stream);
 					byte[] result = stream.toByteArray();
-					img.setData(Base64.encodeBase64String(result));
+					img.setData(Base64.getEncoder().encodeToString(result));
 				}
 			}
 

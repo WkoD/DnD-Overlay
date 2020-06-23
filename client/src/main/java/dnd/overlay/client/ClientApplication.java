@@ -1,13 +1,11 @@
 package dnd.overlay.client;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import dnd.overlay.client.appconfig.Configuration;
 
-@SpringBootApplication
 public class ClientApplication {
 
 	public static void main(String[] args) {
-//		SpringApplication.run(ClientApplication.class, args);
+	   Configuration.readArgs(args);
 		Client.runthis(args);
 	}
 
