@@ -5,12 +5,20 @@
     <parent>
         <groupId>com.github.wkod.dnd</groupId>
         <artifactId>overlay</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.2</version>
     </parent>
     <groupId>com.github.wkod.dnd.overlay</groupId>
     <artifactId>client</artifactId>
     <name>DnD-Overlay-Client</name>
     <dependencies>
+        <dependency>
+            <groupId>com.github.wkod.dnd.overlay</groupId>
+            <artifactId>api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.wkod.dnd.overlay</groupId>
+            <artifactId>util</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -32,6 +40,14 @@
         </dependency>
     </dependencies>
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>configuration.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -47,6 +63,31 @@
                     <release>${openjfx.version}</release>
                     <mainClass>dnd.overlay.client.Client</mainClass>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target</outputDirectory>
+                            <encoding>UTF-8</encoding>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/resources</directory>
+                                    <includes>
+                                        <include>configuration.properties</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

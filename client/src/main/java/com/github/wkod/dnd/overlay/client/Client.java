@@ -1,29 +1,16 @@
 package com.github.wkod.dnd.overlay.client;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+import java.io.File;
+import java.io.IOException;
 
-/**
- * Overlay.
- * 
- * @author cpawek
- * @version 1.0
- */
-public class Client extends Application {
+import com.github.wkod.dnd.overlay.client.config.Configuration;
+import com.github.wkod.dnd.overlay.client.fx.ClientFx;
 
-   public static void runthis(String[] args) {
-      Application.launch(args);
-   }
+public class Client {
 
-   /**
-    * start.
-    * 
-    * @see javafx.application.Application#start(javafx.stage.Stage)
-    * @param pPrimaryStage2
-    * @throws Exception
-    */
-   @Override
-   public void start(Stage pPrimaryStage) throws Exception {
-      new ClientWindow().show();
-   }
+    public static void main(String[] args) throws IOException {
+        Configuration.load(new File("configuration.properties"));
+        ClientFx.runthis(args);
+    }
+
 }
