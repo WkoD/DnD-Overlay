@@ -1,5 +1,7 @@
 package com.github.wkod.dnd.overlay.server.fx;
 
+import com.github.wkod.dnd.overlay.server.config.Configuration;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -47,7 +49,7 @@ public class OlBackground extends Stage {
         
         // add name label
         lblname = new Text("");
-        lblname.setFont(new Font(50));
+        lblname.setFont(new Font(Configuration.BACKGROUND_TEXT_SIZE.get()));
         lblname.setStyle("-fx-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
         lblname.maxWidth(Double.MAX_VALUE);
         lblname.maxHeight(Double.MAX_VALUE);
