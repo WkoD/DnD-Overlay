@@ -8,6 +8,11 @@ import java.util.Properties;
 
 public abstract class ConfigurationBase<T> {
     
+    /**
+     * Configuration cache.
+     */
+    private static final Properties CONFIGURATION = new Properties();
+    
     private final String name;
     
     private final Class<?> clazz;
@@ -19,7 +24,7 @@ public abstract class ConfigurationBase<T> {
     
     @SuppressWarnings("unchecked")
     public T get() {
-        String value = getConfig(name);
+        String value = CONFIGURATION.getProperty(name);
         if (clazz.isAssignableFrom(Boolean.class)) {
             return (T) Boolean.valueOf(value);
         } else if (clazz.isAssignableFrom(Integer.class)) {
@@ -28,18 +33,16 @@ public abstract class ConfigurationBase<T> {
             return (T) value;
         }
     }
-    
-    protected abstract String getConfig(final String name);
-    
+
     /**
      * Read configuration from file.
      * 
      * @param configfile File
      * @throws IOException Exception
      */
-    protected static void load(final Properties configuration, final File configfile) throws IOException {
+    public static void load(final File configfile) throws IOException {
         // clear current config
-        configuration.clear();
+        CONFIGURATION.clear();
         
         // ignore missing files
         if (configfile == null || !configfile.exists()) {
@@ -47,7 +50,7 @@ public abstract class ConfigurationBase<T> {
         }
         
         try (InputStream is = new FileInputStream(configfile)) {
-            configuration.load(is);
+            CONFIGURATION.load(is);
         }
     }
 }
