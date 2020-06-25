@@ -76,6 +76,6 @@ public class Sender {
     }
     
     private static String getTarget() {
-        return "http://" + Configuration.HOST.get() + ":" + Configuration.PORT.get() + "/overlay";
+        return "http://" + Configuration.CONNECTION_HOST.get() + ":" + Configuration.CONNECTION_PORT.get() + "/overlay";
     }
 }

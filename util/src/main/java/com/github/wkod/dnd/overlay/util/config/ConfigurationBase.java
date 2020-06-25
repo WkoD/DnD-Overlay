@@ -1,4 +1,4 @@
-package com.github.wkod.dnd.overlay.util;
+package com.github.wkod.dnd.overlay.util.config;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,11 +17,22 @@ public abstract class ConfigurationBase<T> {
     
     private final Class<?> clazz;
     
+    /**
+     * Constructor.
+     * 
+     * @param name String
+     * @param clazz Class<?>
+     */
     protected ConfigurationBase(String name, Class<?> clazz) {
         this.name = name;
         this.clazz = clazz;
     }
     
+    /**
+     * Get the value of a property cast into its specific type.
+     * 
+     * @return T
+     */
     @SuppressWarnings("unchecked")
     public T get() {
         String value = CONFIGURATION.getProperty(name);
@@ -52,5 +63,16 @@ public abstract class ConfigurationBase<T> {
         try (InputStream is = new FileInputStream(configfile)) {
             CONFIGURATION.load(is);
         }
+    }
+    
+    /**
+     * Creates a copy of all configuration parameters.
+     * 
+     * @return Properties
+     */
+    public static Properties getCopy() {
+        Properties clone = new Properties();
+        clone.putAll(CONFIGURATION);
+        return clone;
     }
 }

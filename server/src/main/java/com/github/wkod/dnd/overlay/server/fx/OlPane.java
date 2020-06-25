@@ -64,7 +64,7 @@ public class OlPane extends Pane {
         for (int i = 0; i < slotlist.size(); ++i) {
             OlImage ol = slotlist.get(i);
 
-            ol.setLayoutX(getVisibleWidth() - Configuration.MIN_IMAGE_SIZE.get()
+            ol.setLayoutX(getVisibleWidth() - Configuration.IMAGE_SIZE_MIN.get()
                     - (ol.getBoundsInParent().getMinX() - ol.getLayoutX()));
             ol.setLayoutY(slotmin + (i * slotsize) - (ol.getBoundsInParent().getMinY() - ol.getLayoutY()));
             ol.toFront();

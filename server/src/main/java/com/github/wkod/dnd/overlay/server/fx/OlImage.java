@@ -119,21 +119,21 @@ public class OlImage extends ImageView {
                 mTouch1Active = false;
 
                 // keep part of picture on screen
-                if (getBoundsInParent().getMinX() + Configuration.MIN_IMAGE_SIZE.get() > mOverlayPane
+                if (getBoundsInParent().getMinX() + Configuration.IMAGE_SIZE_MIN.get() > mOverlayPane
                         .getVisibleWidth()) {
-                    setLayoutX(mOverlayPane.getVisibleWidth() - Configuration.MIN_IMAGE_SIZE.get()
+                    setLayoutX(mOverlayPane.getVisibleWidth() - Configuration.IMAGE_SIZE_MIN.get()
                             - (getBoundsInParent().getMinX() - getLayoutX()));
-                } else if (getBoundsInParent().getMaxX() < Configuration.MIN_IMAGE_SIZE.get()) {
-                    setLayoutX(Configuration.MIN_IMAGE_SIZE.get() - getBoundsInParent().getWidth()
+                } else if (getBoundsInParent().getMaxX() < Configuration.IMAGE_SIZE_MIN.get()) {
+                    setLayoutX(Configuration.IMAGE_SIZE_MIN.get() - getBoundsInParent().getWidth()
                             - (getBoundsInParent().getMinX() - getLayoutX()));
                 }
 
-                if (getBoundsInParent().getMinY() + Configuration.MIN_IMAGE_SIZE.get() > mOverlayPane
+                if (getBoundsInParent().getMinY() + Configuration.IMAGE_SIZE_MIN.get() > mOverlayPane
                         .getVisibleHeight()) {
-                    setLayoutY(mOverlayPane.getVisibleHeight() - Configuration.MIN_IMAGE_SIZE.get()
+                    setLayoutY(mOverlayPane.getVisibleHeight() - Configuration.IMAGE_SIZE_MIN.get()
                             - (getBoundsInParent().getMinY() - getLayoutY()));
-                } else if (getBoundsInParent().getMaxY() < Configuration.MIN_IMAGE_SIZE.get()) {
-                    setLayoutY(Configuration.MIN_IMAGE_SIZE.get() - getBoundsInParent().getHeight()
+                } else if (getBoundsInParent().getMaxY() < Configuration.IMAGE_SIZE_MIN.get()) {
+                    setLayoutY(Configuration.IMAGE_SIZE_MIN.get() - getBoundsInParent().getHeight()
                             - (getBoundsInParent().getMinY() - getLayoutY()));
                 }
             } else if (Objects.equals(mTouch2PointId, e.getTouchPoint().getId())) {

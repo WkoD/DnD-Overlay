@@ -15,6 +15,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import com.github.wkod.dnd.overlay.api.OlScreen;
 import com.github.wkod.dnd.overlay.server.Server;
+import com.github.wkod.dnd.overlay.server.config.Configuration;
 import com.sun.glass.ui.Screen;
 
 import javafx.application.Application;
@@ -43,7 +44,8 @@ public class ServerFx extends Application {
     public void init() {
         String[] args = getParameters().getRaw().toArray(new String[0]);
 
-        this.applicationContext = new SpringApplicationBuilder().sources(Server.class).run(args);
+        this.applicationContext = new SpringApplicationBuilder().sources(Server.class)
+                .properties(Configuration.getCopy()).run(args);
     }
 
     /**
@@ -102,9 +104,9 @@ public class ServerFx extends Application {
     /**
      * Set background image for a given screen.
      * 
-     * @param screenid Integer
-     * @param name     String
-     * @param image    byte[]
+     * @param screenid   Integer
+     * @param name       String
+     * @param image      byte[]
      * @param background boolean
      */
     public static void setImage(Integer screenid, String name, byte[] image, boolean background) {

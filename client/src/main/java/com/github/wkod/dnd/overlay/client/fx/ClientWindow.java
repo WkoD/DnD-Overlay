@@ -76,7 +76,7 @@ public class ClientWindow extends Stage {
         setScene(scene);
 
         // update screens if enabled
-        if (Configuration.UPDATE_SCREENS_AT_STARTUP.get()) {
+        if (Configuration.STARTUP_UPDATE_SCREEN.get()) {
             updateScreenListPane();
         }
     }
