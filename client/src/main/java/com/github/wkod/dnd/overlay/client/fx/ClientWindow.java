@@ -206,6 +206,7 @@ public class ClientWindow extends Stage {
                 if (e.getGestureSource() != pane && e.getDragboard().hasFiles()) {
                     e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                 }
+                
                 e.consume();
             });
 
@@ -243,6 +244,13 @@ public class ClientWindow extends Stage {
                         LOGGER.error(e1.getMessage(), e1);
                     }
                 }
+                
+                e.consume();
+            });
+            
+            pane.setOnMouseEntered(e -> {
+                background.requestFocus();
+                e.consume();
             });
 
             // add children
