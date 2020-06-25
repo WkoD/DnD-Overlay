@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ServerController {
-    
+
     private final ServerService service;
 
     @GetMapping
@@ -29,7 +29,7 @@ public class ServerController {
     public void setBackground(@RequestBody(required = true) OlData data) throws OlException {
         service.setBackground(data.getScreenid(), data.getName(), data.getData());
     }
-    
+
     @PostMapping("/background/toggle")
     public void toggleBackground(@RequestBody(required = true) Integer screenid) throws OlException {
         service.toggleBackground(screenid);
@@ -44,12 +44,12 @@ public class ServerController {
     public void setImage(@RequestBody(required = true) OlData data) throws OlException {
         service.setImage(data.getScreenid(), data.getName(), data.getData());
     }
-    
+
     @PostMapping("/image/toggle")
     public void toggleImage(@RequestBody(required = true) Integer screenid) throws OlException {
         service.toggleImage(screenid);
     }
-    
+
     @PostMapping("/image/clear")
     public void clearImage(@RequestBody(required = true) Integer screenid) throws OlException {
         service.clearImage(screenid);

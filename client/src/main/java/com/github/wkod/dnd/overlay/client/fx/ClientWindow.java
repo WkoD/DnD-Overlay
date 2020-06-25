@@ -216,8 +216,8 @@ public class ClientWindow extends Stage {
 
                 for (final File file : db.getFiles()) {
                     try (FileInputStream fis = new FileInputStream(file)) {
-                        Sender.setImageData(screen.getId(), urlToName(file.getName()), imageToByte(new Image(fis)),
-                                background.isSelected());
+                        Sender.setImageData(screen.getId(), displayname.isSelected() ? urlToName(file.getName()) : null,
+                                imageToByte(new Image(fis)), background.isSelected());
                         background.setSelected(false);
                     } catch (IOException | OlException e1) {
                         LOGGER.error(e1.getMessage(), e1);
@@ -234,8 +234,9 @@ public class ClientWindow extends Stage {
 
                     try {
                         if (cb.hasContent(DataFormat.IMAGE)) {
-                            Sender.setImageData(screen.getId(), urlToName(cb.getUrl()), imageToByte(cb.getImage()),
-                                    background.isSelected());
+                            Sender.setImageData(screen.getId(),
+                                    displayname.isSelected() ? urlToName(cb.getUrl()) : null,
+                                    imageToByte(cb.getImage()), background.isSelected());
                             background.setSelected(false);
                         }
                     } catch (IOException | OlException e1) {

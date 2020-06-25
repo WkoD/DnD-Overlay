@@ -9,6 +9,7 @@ import javafx.stage.StageStyle;
 public class OlStage extends Stage {
 
     private final OlPane pane;
+
     private final OlBackground background;
 
     /**
@@ -55,7 +56,7 @@ public class OlStage extends Stage {
             pane.toFront();
         }
 
-        background.setImage(image);
+        background.setImage(name, image);
     }
 
     public void toggleBackground() {
@@ -70,7 +71,19 @@ public class OlStage extends Stage {
     }
 
     public void setImage(String name, Image image) {
+        if (!isShowing()) {
+            show();
+        }
+        
         pane.addImage(new OlImage(pane, name, image));
+    }
+
+    public void toogleImage() {
+        if (isShowing()) {
+            hide();
+        } else {
+            show();
+        }
     }
 
     public void clearImage() {

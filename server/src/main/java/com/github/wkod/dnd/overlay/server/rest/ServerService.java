@@ -16,7 +16,7 @@ public class ServerService {
     }
 
     public void setBackground(Integer screenid, String name, String data) {
-        ServerFx.setBackground(screenid, name, data != null ? Base64.decodeBase64(data) : null);
+        ServerFx.setImage(screenid, name, data != null ? Base64.decodeBase64(data) : null, true);
     }
 
     public void toggleBackground(Integer screenid) {
@@ -28,7 +28,7 @@ public class ServerService {
     }
 
     public void setImage(Integer screenid, String name, String data) {
-        ServerFx.setImage(screenid, name, data != null ? Base64.decodeBase64(data) : null);
+        ServerFx.setImage(screenid, name, data != null ? Base64.decodeBase64(data) : null, false);
     }
 
     public void toggleImage(Integer screenid) {

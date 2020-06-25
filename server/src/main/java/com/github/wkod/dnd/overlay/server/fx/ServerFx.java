@@ -103,10 +103,11 @@ public class ServerFx extends Application {
      * Set background image for a given screen.
      * 
      * @param screenid Integer
-     * @param name String
-     * @param image byte[]
+     * @param name     String
+     * @param image    byte[]
+     * @param background boolean
      */
-    public static void setBackground(Integer screenid, String name, byte[] image) {
+    public static void setImage(Integer screenid, String name, byte[] image, boolean background) {
         OlStage stage;
 
         // invalid screen
@@ -118,7 +119,11 @@ public class ServerFx extends Application {
             Platform.runLater(() -> {
                 if (image != null) {
                     try (InputStream is = new ByteArrayInputStream(image)) {
-                        stage.setBackground(name, new Image(is));
+                        if (background) {
+                            stage.setBackground(name, new Image(is));
+                        } else {
+                            stage.setImage(name, new Image(is));
+                        }
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage(), e);
                     }
@@ -130,33 +135,9 @@ public class ServerFx extends Application {
     }
 
     /**
-     * Add an image to a given screen.
-     * 
-     * @param screenid Integer
-     * @param name String
-     * @param image byte[]
-     */
-    public static void setImage(Integer screenid, String name, byte[] image) {
-        OlStage stage;
-
-        // invalid screen
-        if (screenid == null || (stage = screenMap.get(screenid)) == null) {
-            return;
-        }
-
-        Runnable runnable = () -> {
-            Platform.runLater(() -> {
-                stage.setImage(name, new Image(new ByteArrayInputStream(image)));
-            });
-        };
-
-        runnable.run();
-    }
-    
-    /**
      * Toggles all images or the background image between shown and hidden.
      * 
-     * @param screenid Integer
+     * @param screenid   Integer
      * @param background boolean
      */
     public static void toggleScreen(Integer screenid, boolean background) {
@@ -172,11 +153,7 @@ public class ServerFx extends Application {
                 if (background) {
                     stage.toggleBackground();
                 } else {
-                    if (stage.isShowing()) {
-                        stage.hide();
-                    } else {
-                        stage.show();
-                    }
+                    stage.toogleImage();
                 }
             });
         };
@@ -187,7 +164,7 @@ public class ServerFx extends Application {
     /**
      * Remove all images or the background image for a given screen.
      * 
-     * @param screenid Integer
+     * @param screenid   Integer
      * @param background boolean
      */
     public static void clearScreen(Integer screenid, boolean background) {

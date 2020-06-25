@@ -12,21 +12,22 @@ public class OlPane extends Pane {
 
     private final int width;
     private final int height;
-    private final double mPosInterval;
-    private final double mMaxPos = 10;
-    private int mNextPos = 1;
 
-    private final List<OlImage> mSlots = new ArrayList<>();
-    private final int mSlotsMin;
-    private final int mSlotsMax;
+    private final double posintervall;
+    private final double posmax = 10;
+    private int posnext = 1;
+
+    private final List<OlImage> slotlist = new ArrayList<>();
+    private final int slotmin;
+    private final int slotmax;
 
     public OlPane(int width, int height) {
         this.width = width;
         this.height = height;
-        mPosInterval = this.width / mMaxPos;
+        posintervall = this.width / posmax;
 
-        mSlotsMin = (int) (this.height * 0.1);
-        mSlotsMax = this.height - (int) (this.height * 0.1);
+        slotmin = (int) (this.height * 0.1);
+        slotmax = this.height - (int) (this.height * 0.1);
 
         setBackground(null);
     }
@@ -39,46 +40,45 @@ public class OlPane extends Pane {
         return height;
     }
 
-    public void addImage(final OlImage pOverlayImage) {
+    public void addImage(final OlImage image) {
         // set position
-        pOverlayImage.setLayoutX(
-                mNextPos++ * mPosInterval - (pOverlayImage.getBoundsInParent().getMinX() - pOverlayImage.getLayoutX()));
-        pOverlayImage.setLayoutY(-pOverlayImage.getBoundsInParent().getMinY());
+        image.setLayoutX(posnext++ * posintervall - (image.getBoundsInParent().getMinX() - image.getLayoutX()));
+        image.setLayoutY(-image.getBoundsInParent().getMinY());
 
-        if (mNextPos > mMaxPos - 2) {
-            mNextPos = 1;
+        if (posnext > posmax - 2) {
+            posnext = 1;
         }
 
         // add image to pane
-        getChildren().add(pOverlayImage);
+        getChildren().add(image);
     }
 
-    public void toSlot(final OlImage pOverlayImage) {
+    public void toSlot(final OlImage image) {
         // add image to slots
-        mSlots.add(pOverlayImage);
-        pOverlayImage.setSlotted(true);
+        slotlist.add(image);
+        image.setSlotted(true);
 
         // update slots
-        double slotsize = (mSlotsMax - mSlotsMin) / mSlots.size();
+        double slotsize = (slotmax - slotmin) / slotlist.size();
 
-        for (int i = 0; i < mSlots.size(); ++i) {
-            OlImage image = mSlots.get(i);
+        for (int i = 0; i < slotlist.size(); ++i) {
+            OlImage ol = slotlist.get(i);
 
-            image.setLayoutX(getVisibleWidth() - Configuration.MIN_IMAGE_SIZE.get()
-                    - (image.getBoundsInParent().getMinX() - image.getLayoutX()));
-            image.setLayoutY(mSlotsMin + (i * slotsize) - (image.getBoundsInParent().getMinY() - image.getLayoutY()));
-            image.toFront();
+            ol.setLayoutX(getVisibleWidth() - Configuration.MIN_IMAGE_SIZE.get()
+                    - (ol.getBoundsInParent().getMinX() - ol.getLayoutX()));
+            ol.setLayoutY(slotmin + (i * slotsize) - (ol.getBoundsInParent().getMinY() - ol.getLayoutY()));
+            ol.toFront();
         }
     }
 
-    public void removeSlot(final OlImage pOverlayImage) {
-        for (int i = mSlots.size() - 1; i >= 0; --i) {
-            if (Objects.equals(mSlots.get(i).getId(), pOverlayImage.getId())) {
-                mSlots.remove(i);
-                System.out.println(pOverlayImage.getId());
+    public void removeSlot(final OlImage image) {
+        for (int i = slotlist.size() - 1; i >= 0; --i) {
+            if (Objects.equals(slotlist.get(i).getId(), image.getId())) {
+                slotlist.remove(i);
+                System.out.println(image.getId());
             }
         }
 
-        pOverlayImage.setSlotted(false);
+        image.setSlotted(false);
     }
 }

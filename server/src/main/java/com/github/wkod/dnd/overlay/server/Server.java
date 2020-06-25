@@ -16,14 +16,14 @@ import javafx.application.Platform;
 @SpringBootApplication
 public class Server {
 
-	public static void main(String[] args) throws IOException {
-	    Configuration.load(new File("configuration.properties"));
-		Application.launch(ServerFx.class, args);
-	}
+    public static void main(String[] args) throws IOException {
+        Configuration.load(new File("configuration.properties"));
+        Application.launch(ServerFx.class, args);
+    }
 
-	@PreDestroy
-	public void onExit() {
-	    // close javafx
-	    Platform.exit();
-	}
+    @PreDestroy
+    public void onExit() {
+        // close javafx
+        Platform.exit();
+    }
 }

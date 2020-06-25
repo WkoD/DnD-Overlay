@@ -17,182 +17,188 @@ import lombok.experimental.Accessors;
 
 @Accessors(prefix = "m")
 public class OlImage extends ImageView {
-   
-   private static int mCount = 0;
 
-   private final OlPane mOverlayPane;
+    private static int mCount = 0;
 
-   private double mDragX;
+    private final OlPane mOverlayPane;
 
-   private double mDragY;
-   
-   @Getter
-   @Setter
-   private boolean mSlotted = false;
-   
-   @Getter
-   private final String mName;
+    private double mDragX;
 
-   private int mTouch1PointId;
-   private boolean mTouch1Active;
-   private Point2D mTouch1Position;
+    private double mDragY;
 
-   private int mTouch2PointId;
-   private boolean mTouch2Active;
-   private Point2D mTouch2Position;
+    @Getter
+    @Setter
+    private boolean mSlotted = false;
 
-   public OlImage(final OlPane pOverlayPane, final String pName, final Image pImage) {
-      super(removeAlpha(pImage));
-      setId(String.valueOf(mCount++));
-      mOverlayPane = pOverlayPane;
+    @Getter
+    private final String mName;
 
-      mName = pName;
-      
-      // set properties
-      setPreserveRatio(true);
+    private int mTouch1PointId;
+    private boolean mTouch1Active;
+    private Point2D mTouch1Position;
 
-      // set sizes to 1/5 of screen (height)
-      defaultScale();
+    private int mTouch2PointId;
+    private boolean mTouch2Active;
+    private Point2D mTouch2Position;
 
-      // register Events
-      setOnMousePressed(e -> {
-         toFront();
+    public OlImage(final OlPane pOverlayPane, final String pName, final Image pImage) {
+        super(removeAlpha(pImage));
+        setId(String.valueOf(mCount++));
+        mOverlayPane = pOverlayPane;
 
-         mDragX = getLayoutX() - e.getSceneX();
-         mDragY = getLayoutY() - e.getSceneY();
-      });
+        mName = pName;
 
-      setOnMouseDragged(e -> {
-         setLayoutX(e.getSceneX() + mDragX);
-         setLayoutY(e.getSceneY() + mDragY);
-      });
+        // set properties
+        setPreserveRatio(true);
 
-      // touch events
-      setOnTouchPressed(e -> {
-         if (!mTouch1Active) {
-            // first finger
-            mTouch1Active = true;
-            mTouch1PointId = e.getTouchPoint().getId();
-            mTouch1Position = new Point2D(e.getTouchPoint().getSceneX(), e.getTouchPoint().getSceneY());
-            
+        // set sizes to 1/5 of screen (height)
+        defaultScale();
+
+        // register Events
+        setOnMousePressed(e -> {
             toFront();
-         } else if (!mTouch2Active) {
-            // second finger
-            mTouch2Active = true;
-            mTouch2PointId = e.getTouchPoint().getId();
-            mTouch2Position = new Point2D(e.getTouchPoint().getSceneX(), e.getTouchPoint().getSceneY());
-         }
 
-         e.consume();
-      });
+            mDragX = getLayoutX() - e.getSceneX();
+            mDragY = getLayoutY() - e.getSceneY();
+        });
 
-      setOnTouchMoved(e -> {
-         if (mTouch1Active) {
+        setOnMouseDragged(e -> {
+            setLayoutX(e.getSceneX() + mDragX);
+            setLayoutY(e.getSceneY() + mDragY);
+        });
+
+        // touch events
+        setOnTouchPressed(e -> {
+            if (!mTouch1Active) {
+                // first finger
+                mTouch1Active = true;
+                mTouch1PointId = e.getTouchPoint().getId();
+                mTouch1Position = new Point2D(e.getTouchPoint().getSceneX(), e.getTouchPoint().getSceneY());
+
+                toFront();
+            } else if (!mTouch2Active) {
+                // second finger
+                mTouch2Active = true;
+                mTouch2PointId = e.getTouchPoint().getId();
+                mTouch2Position = new Point2D(e.getTouchPoint().getSceneX(), e.getTouchPoint().getSceneY());
+            }
+
+            e.consume();
+        });
+
+        setOnTouchMoved(e -> {
+            if (mTouch1Active) {
+                if (Objects.equals(mTouch1PointId, e.getTouchPoint().getId())) {
+                    // move first finger
+                    Point2D position = new Point2D(e.getTouchPoint().getSceneX(), e.getTouchPoint().getSceneY());
+
+                    setLayoutX(getLayoutX() + position.getX() - mTouch1Position.getX());
+                    setLayoutY(getLayoutY() + position.getY() - mTouch1Position.getY());
+
+                    // update finger position
+                    mTouch1Position = position;
+
+                    if (mSlotted) {
+                        mOverlayPane.removeSlot(this);
+                    }
+
+                } else if (Objects.equals(mTouch2PointId, e.getTouchPoint().getId())) {
+                    // move second finger
+                    Point2D position = new Point2D(e.getTouchPoint().getSceneX(), e.getTouchPoint().getSceneY());
+
+                    // update finger position
+                    mTouch2Position = position;
+                }
+            }
+
+            e.consume();
+        });
+
+        setOnTouchReleased(e -> {
             if (Objects.equals(mTouch1PointId, e.getTouchPoint().getId())) {
-               // move first finger
-               Point2D position = new Point2D(e.getTouchPoint().getSceneX(), e.getTouchPoint().getSceneY());
+                mTouch1Active = false;
 
-               setLayoutX(getLayoutX() + position.getX() - mTouch1Position.getX());
-               setLayoutY(getLayoutY() + position.getY() - mTouch1Position.getY());
+                // keep part of picture on screen
+                if (getBoundsInParent().getMinX() + Configuration.MIN_IMAGE_SIZE.get() > mOverlayPane
+                        .getVisibleWidth()) {
+                    setLayoutX(mOverlayPane.getVisibleWidth() - Configuration.MIN_IMAGE_SIZE.get()
+                            - (getBoundsInParent().getMinX() - getLayoutX()));
+                } else if (getBoundsInParent().getMaxX() < Configuration.MIN_IMAGE_SIZE.get()) {
+                    setLayoutX(Configuration.MIN_IMAGE_SIZE.get() - getBoundsInParent().getWidth()
+                            - (getBoundsInParent().getMinX() - getLayoutX()));
+                }
 
-               // update finger position
-               mTouch1Position = position;
-               
-               if (mSlotted) {
-                  mOverlayPane.removeSlot(this);
-               }
-
+                if (getBoundsInParent().getMinY() + Configuration.MIN_IMAGE_SIZE.get() > mOverlayPane
+                        .getVisibleHeight()) {
+                    setLayoutY(mOverlayPane.getVisibleHeight() - Configuration.MIN_IMAGE_SIZE.get()
+                            - (getBoundsInParent().getMinY() - getLayoutY()));
+                } else if (getBoundsInParent().getMaxY() < Configuration.MIN_IMAGE_SIZE.get()) {
+                    setLayoutY(Configuration.MIN_IMAGE_SIZE.get() - getBoundsInParent().getHeight()
+                            - (getBoundsInParent().getMinY() - getLayoutY()));
+                }
             } else if (Objects.equals(mTouch2PointId, e.getTouchPoint().getId())) {
-               // move second finger
-               Point2D position = new Point2D(e.getTouchPoint().getSceneX(), e.getTouchPoint().getSceneY());
-               
-               // update finger position
-               mTouch2Position = position;
-            }
-         }
-
-         e.consume();
-      });
-
-      setOnTouchReleased(e -> {
-         if (Objects.equals(mTouch1PointId, e.getTouchPoint().getId())) {
-            mTouch1Active = false;
-
-            // keep part of picture on screen
-            if (getBoundsInParent().getMinX() + Configuration.MIN_IMAGE_SIZE.get() > mOverlayPane.getVisibleWidth()) {
-               setLayoutX(mOverlayPane.getVisibleWidth() - Configuration.MIN_IMAGE_SIZE.get() - (getBoundsInParent().getMinX() - getLayoutX()));
-            } else if (getBoundsInParent().getMaxX() < Configuration.MIN_IMAGE_SIZE.get()) {
-               setLayoutX(Configuration.MIN_IMAGE_SIZE.get() - getBoundsInParent().getWidth() - (getBoundsInParent().getMinX() - getLayoutX()));
+                mTouch2Active = false;
             }
 
-            if (getBoundsInParent().getMinY() + Configuration.MIN_IMAGE_SIZE.get() > mOverlayPane.getVisibleHeight()) {
-               setLayoutY(mOverlayPane.getVisibleHeight() - Configuration.MIN_IMAGE_SIZE.get() - (getBoundsInParent().getMinY() - getLayoutY()));
-            } else if (getBoundsInParent().getMaxY() < Configuration.MIN_IMAGE_SIZE.get()) {
-               setLayoutY(Configuration.MIN_IMAGE_SIZE.get() - getBoundsInParent().getHeight() - (getBoundsInParent().getMinY() - getLayoutY()));
+            e.consume();
+        });
+
+        setOnZoom(e -> {
+            setScale(getScale() * e.getZoomFactor());
+            e.consume();
+        });
+
+        setOnRotate(e -> {
+            setRotate(getRotate() + e.getAngle());
+            e.consume();
+        });
+
+        setOnSwipeRight(e -> {
+            defaultScale();
+            setRotate(0);
+            mOverlayPane.toSlot(this);
+            e.consume();
+        });
+    }
+
+    public void setScale(final double pScale) {
+        setScaleX(pScale);
+        setScaleY(pScale);
+    }
+
+    public double getScale() {
+        return getScaleX();
+    }
+
+    private void defaultScale() {
+        double defaultHeight = (mOverlayPane.getHeight() * 0.5);
+        double relheightpercent = getImage().getHeight() / defaultHeight;
+        double scalefactor = 1 / relheightpercent;
+
+        setScale(scalefactor);
+    }
+
+    public static final Image removeAlpha(final Image pImage) {
+        final int width = (int) pImage.getWidth();
+        final int height = (int) pImage.getHeight();
+        WritableImage result = new WritableImage(width, height);
+
+        PixelReader reader = pImage.getPixelReader();
+        PixelWriter writer = result.getPixelWriter();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // Retrieving the color of the pixel of the loaded image
+                Color color = reader.getColor(x, y);
+
+                if (color.getOpacity() > 0) {
+                    writer.setColor(x, y, new Color(color.getRed(), color.getGreen(), color.getBlue(), 1.0));
+                } else {
+                    writer.setColor(x, y, Color.WHITE);
+                }
             }
-         } else if (Objects.equals(mTouch2PointId, e.getTouchPoint().getId())) {
-            mTouch2Active = false;
-         }
+        }
 
-         e.consume();
-      });
-
-      setOnZoom(e -> {
-         setScale(getScale() * e.getZoomFactor());
-         e.consume();
-      });
-
-      setOnRotate(e -> {
-         setRotate(getRotate() + e.getAngle());
-         e.consume();
-      });
-      
-      setOnSwipeRight(e -> {
-         defaultScale();
-         setRotate(0);
-         mOverlayPane.toSlot(this);
-         e.consume();
-      });
-   }
-
-   public void setScale(final double pScale) {
-      setScaleX(pScale);
-      setScaleY(pScale);
-   }
-
-   public double getScale() {
-      return getScaleX();
-   }
-   
-   private void defaultScale() {
-      double defaultHeight = (mOverlayPane.getHeight() * 0.5);
-      double relheightpercent = getImage().getHeight() / defaultHeight;
-      double scalefactor = 1 / relheightpercent;
-
-      setScale(scalefactor);
-   }
-
-   public static final Image removeAlpha(final Image pImage) {
-      final int width = (int) pImage.getWidth();
-      final int height = (int) pImage.getHeight();
-      WritableImage result = new WritableImage(width, height);
-
-      PixelReader reader = pImage.getPixelReader();
-      PixelWriter writer = result.getPixelWriter();
-
-      for (int y = 0; y < height; y++) {
-         for (int x = 0; x < width; x++) {
-            // Retrieving the color of the pixel of the loaded image
-            Color color = reader.getColor(x, y);
-
-            if (color.getOpacity() > 0) {
-               writer.setColor(x, y, new Color(color.getRed(), color.getGreen(), color.getBlue(), 1.0));
-            } else {
-               writer.setColor(x, y, Color.WHITE);
-            }
-         }
-      }
-
-      return result;
-   }
+        return result;
+    }
 }
