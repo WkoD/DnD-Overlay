@@ -72,7 +72,7 @@ public class ClientWindow extends Stage {
         screenListPane = new HBox();
         screenListPane.setMinHeight(200d);
         root.setCenter(screenListPane);
-        
+
         // set console
         root.setBottom(createConsole());
 
@@ -110,11 +110,11 @@ public class ClientWindow extends Stage {
                 updateScreenListPane();
             }
         });
-        
+
         console.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent pEvent) {
-                Node node = ((BorderPane)(menubar.getParent())).getBottom();
+                Node node = ((BorderPane) (menubar.getParent())).getBottom();
 
                 boolean togglestate = !node.isVisible();
                 node.setManaged(togglestate);
@@ -135,16 +135,16 @@ public class ClientWindow extends Stage {
 
         return menubar;
     }
-    
+
     private TextArea createConsole() {
         TextArea console = new TextArea();
         console.setEditable(false);
         console.setStyle("-fx-font-family: 'monospaced';");
         console.setMinHeight(100d);
         console.setMaxHeight(100d);
-        
+
         StaticOutputStreamAppender.setStaticOutputStream(new TextAreaOutputStream(console));
-        
+
         return console;
     }
 
@@ -215,6 +215,7 @@ public class ClientWindow extends Stage {
             // set events
             // toggle button
             toggle.setOnAction(e -> {
+                LOGGER.debug("Toggle Screen " + screen.getId());
                 try {
                     Sender.toggleImageData(screen.getId(), background.isSelected());
                     background.setSelected(false);
@@ -225,7 +226,7 @@ public class ClientWindow extends Stage {
 
             // reset button
             reset.setOnAction(e -> {
-                LOGGER.info("Reset");//TODO remove me
+                LOGGER.debug("Reset Screen " + screen.getId());
                 try {
                     Sender.clearImageData(screen.getId(), background.isSelected());
                     background.setSelected(false);
@@ -239,7 +240,7 @@ public class ClientWindow extends Stage {
                 if (e.getGestureSource() != pane && e.getDragboard().hasFiles()) {
                     e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                 }
-                
+
                 e.consume();
             });
 
@@ -249,8 +250,11 @@ public class ClientWindow extends Stage {
                 e.setDropCompleted(db.hasFiles());
 
                 for (final File file : db.getFiles()) {
+                    String filename = urlToName(file.getName());
+                    LOGGER.debug("Send to Screen " + screen.getId() + (background.isSelected() ? "  BG " : " IMG ")
+                            + filename);
                     try (FileInputStream fis = new FileInputStream(file)) {
-                        Sender.setImageData(screen.getId(), displayname.isSelected() ? urlToName(file.getName()) : null,
+                        Sender.setImageData(screen.getId(), displayname.isSelected() ? filename : null,
                                 imageToByte(new Image(fis)), background.isSelected());
                         background.setSelected(false);
                     } catch (IOException | OlException e1) {
@@ -268,8 +272,10 @@ public class ClientWindow extends Stage {
 
                     try {
                         if (cb.hasContent(DataFormat.IMAGE)) {
-                            Sender.setImageData(screen.getId(),
-                                    displayname.isSelected() ? urlToName(cb.getUrl()) : null,
+                            String filename = urlToName(cb.getUrl());
+                            LOGGER.debug("Send to Screen " + screen.getId()
+                                    + (background.isSelected() ? "  BG " : " IMG ") + filename);
+                            Sender.setImageData(screen.getId(), displayname.isSelected() ? filename : null,
                                     imageToByte(cb.getImage()), background.isSelected());
                             background.setSelected(false);
                         }
@@ -277,10 +283,10 @@ public class ClientWindow extends Stage {
                         LOGGER.error(e1.getMessage(), e1);
                     }
                 }
-                
+
                 e.consume();
             });
-            
+
             pane.setOnMouseEntered(e -> {
                 background.requestFocus();
                 e.consume();
@@ -306,7 +312,7 @@ public class ClientWindow extends Stage {
         if (bimage == null) {
             throw new IOException("Image can't be read");
         }
-        
+
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             ImageIO.write(bimage, "png", stream);
             return stream.toByteArray();
@@ -336,11 +342,11 @@ public class ClientWindow extends Stage {
             return result.substring(0, index);
         }
     }
-    
+
     private static class TextAreaOutputStream extends OutputStream {
-        
+
         private final TextArea textArea;
-        
+
         public TextAreaOutputStream(TextArea textArea) {
             this.textArea = textArea;
         }
