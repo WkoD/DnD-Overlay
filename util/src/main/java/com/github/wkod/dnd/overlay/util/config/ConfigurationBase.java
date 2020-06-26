@@ -19,7 +19,7 @@ public abstract class ConfigurationBase<T> {
     
     private final Class<?> clazz;
     
-    private final Validator<T> validator;
+    private final ConfigurationValidator<T> validator;
     
     /**
      * Constructor.
@@ -33,7 +33,7 @@ public abstract class ConfigurationBase<T> {
         });
     }
     
-    protected ConfigurationBase(String name, Class<?> clazz, Validator<T> validator) {
+    protected ConfigurationBase(String name, Class<?> clazz, ConfigurationValidator<T> validator) {
         this.name = name;
         this.clazz = clazz;
         this.validator = validator;

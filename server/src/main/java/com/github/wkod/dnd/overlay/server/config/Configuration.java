@@ -1,7 +1,7 @@
 package com.github.wkod.dnd.overlay.server.config;
 
 import com.github.wkod.dnd.overlay.util.config.ConfigurationBase;
-import com.github.wkod.dnd.overlay.util.config.Validator;
+import com.github.wkod.dnd.overlay.util.config.ConfigurationValidator;
 
 public final class Configuration<T> extends ConfigurationBase<T> {
 
@@ -23,7 +23,7 @@ public final class Configuration<T> extends ConfigurationBase<T> {
         super(name, clazz);
     }
 
-    private Configuration(String name, Class<?> clazz, Validator<T> validator) {
+    private Configuration(String name, Class<?> clazz, ConfigurationValidator<T> validator) {
         super(name, clazz, validator);
     }
 }

@@ -1,7 +1,7 @@
 package com.github.wkod.dnd.overlay.client.config;
 
 import com.github.wkod.dnd.overlay.util.config.ConfigurationBase;
-import com.github.wkod.dnd.overlay.util.config.Validator;
+import com.github.wkod.dnd.overlay.util.config.ConfigurationValidator;
 
 public class Configuration<T> extends ConfigurationBase<T> {
 
@@ -15,11 +15,11 @@ public class Configuration<T> extends ConfigurationBase<T> {
     public static final Configuration<Boolean> STARTUP_UPDATE_SCREEN = new Configuration<>("startup.update.screen",
             Boolean.class);
 
-    protected Configuration(String name, Class<?> clazz) {
+    private Configuration(String name, Class<?> clazz) {
         super(name, clazz);
     }
 
-    private Configuration(String name, Class<?> clazz, Validator<T> validator) {
+    private Configuration(String name, Class<?> clazz, ConfigurationValidator<T> validator) {
         super(name, clazz, validator);
     }
 }
