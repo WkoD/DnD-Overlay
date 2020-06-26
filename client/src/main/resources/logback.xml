@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="TextAreaAppender" class="com.github.wkod.dnd.overlay.client.fx.StaticOutputStreamAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{5} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root>
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="TextAreaAppender" />
+    </root>
+
+</configuration>

@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -30,6 +32,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
@@ -67,7 +70,11 @@ public class ClientWindow extends Stage {
 
         // set screen pane
         screenListPane = new HBox();
+        screenListPane.setMinHeight(200d);
         root.setCenter(screenListPane);
+        
+        // set console
+        root.setBottom(createConsole());
 
         // set scene
         scene = new Scene(root);
@@ -85,9 +92,11 @@ public class ClientWindow extends Stage {
         // create menu elements
         Menu menu = new Menu("Menu");
         MenuItem screens = new MenuItem("Read Screens");
+        MenuItem console = new MenuItem("Toggle Console");
         MenuItem exit = new MenuItem("Exit");
 
         menu.getItems().add(screens);
+        menu.getItems().add(console);
         menu.getItems().add(exit);
 
         // create menu bar
@@ -99,6 +108,17 @@ public class ClientWindow extends Stage {
             @Override
             public void handle(ActionEvent pEvent) {
                 updateScreenListPane();
+            }
+        });
+        
+        console.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent pEvent) {
+                Node node = ((BorderPane)(menubar.getParent())).getBottom();
+
+                boolean togglestate = !node.isVisible();
+                node.setManaged(togglestate);
+                node.setVisible(togglestate);
             }
         });
 
@@ -114,6 +134,18 @@ public class ClientWindow extends Stage {
         });
 
         return menubar;
+    }
+    
+    private TextArea createConsole() {
+        TextArea console = new TextArea();
+        console.setEditable(false);
+        console.setStyle("-fx-font-family: 'monospaced';");
+        console.setMinHeight(100d);
+        console.setMaxHeight(100d);
+        
+        StaticOutputStreamAppender.setStaticOutputStream(new TextAreaOutputStream(console));
+        
+        return console;
     }
 
     private void updateScreenListPane() {
@@ -193,6 +225,7 @@ public class ClientWindow extends Stage {
 
             // reset button
             reset.setOnAction(e -> {
+                LOGGER.info("Reset");//TODO remove me
                 try {
                     Sender.clearImageData(screen.getId(), background.isSelected());
                     background.setSelected(false);
@@ -270,6 +303,10 @@ public class ClientWindow extends Stage {
     private static byte[] imageToByte(Image image) throws IOException {
         BufferedImage bimage = SwingFXUtils.fromFXImage(image, null);
 
+        if (bimage == null) {
+            throw new IOException("Image can't be read");
+        }
+        
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             ImageIO.write(bimage, "png", stream);
             return stream.toByteArray();
@@ -297,6 +334,20 @@ public class ClientWindow extends Stage {
             return result;
         } else {
             return result.substring(0, index);
+        }
+    }
+    
+    private static class TextAreaOutputStream extends OutputStream {
+        
+        private final TextArea textArea;
+        
+        public TextAreaOutputStream(TextArea textArea) {
+            this.textArea = textArea;
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            textArea.appendText(String.valueOf((char) b));
         }
     }
 }
