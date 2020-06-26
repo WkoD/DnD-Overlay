@@ -51,7 +51,7 @@ public class OlImage extends ImageView {
         // set properties
         setPreserveRatio(true);
 
-        // set sizes to 1/5 of screen (height)
+        // set sizes to 1/2 of screen (height)
         defaultScale();
 
         // register Events
@@ -119,21 +119,21 @@ public class OlImage extends ImageView {
                 mTouch1Active = false;
 
                 // keep part of picture on screen
-                if (getBoundsInParent().getMinX() + Configuration.IMAGE_SIZE_MIN.get() > mOverlayPane
+                if (getBoundsInParent().getMinX() + Configuration.IMAGE_SIZE_MIN_VISIBLE.get() > mOverlayPane
                         .getVisibleWidth()) {
-                    setLayoutX(mOverlayPane.getVisibleWidth() - Configuration.IMAGE_SIZE_MIN.get()
+                    setLayoutX(mOverlayPane.getVisibleWidth() - Configuration.IMAGE_SIZE_MIN_VISIBLE.get()
                             - (getBoundsInParent().getMinX() - getLayoutX()));
-                } else if (getBoundsInParent().getMaxX() < Configuration.IMAGE_SIZE_MIN.get()) {
-                    setLayoutX(Configuration.IMAGE_SIZE_MIN.get() - getBoundsInParent().getWidth()
+                } else if (getBoundsInParent().getMaxX() < Configuration.IMAGE_SIZE_MIN_VISIBLE.get()) {
+                    setLayoutX(Configuration.IMAGE_SIZE_MIN_VISIBLE.get() - getBoundsInParent().getWidth()
                             - (getBoundsInParent().getMinX() - getLayoutX()));
                 }
 
-                if (getBoundsInParent().getMinY() + Configuration.IMAGE_SIZE_MIN.get() > mOverlayPane
+                if (getBoundsInParent().getMinY() + Configuration.IMAGE_SIZE_MIN_VISIBLE.get() > mOverlayPane
                         .getVisibleHeight()) {
-                    setLayoutY(mOverlayPane.getVisibleHeight() - Configuration.IMAGE_SIZE_MIN.get()
+                    setLayoutY(mOverlayPane.getVisibleHeight() - Configuration.IMAGE_SIZE_MIN_VISIBLE.get()
                             - (getBoundsInParent().getMinY() - getLayoutY()));
-                } else if (getBoundsInParent().getMaxY() < Configuration.IMAGE_SIZE_MIN.get()) {
-                    setLayoutY(Configuration.IMAGE_SIZE_MIN.get() - getBoundsInParent().getHeight()
+                } else if (getBoundsInParent().getMaxY() < Configuration.IMAGE_SIZE_MIN_VISIBLE.get()) {
+                    setLayoutY(Configuration.IMAGE_SIZE_MIN_VISIBLE.get() - getBoundsInParent().getHeight()
                             - (getBoundsInParent().getMinY() - getLayoutY()));
                 }
             } else if (Objects.equals(mTouch2PointId, e.getTouchPoint().getId())) {
@@ -171,7 +171,7 @@ public class OlImage extends ImageView {
     }
 
     private void defaultScale() {
-        double defaultHeight = (mOverlayPane.getHeight() * 0.5);
+        double defaultHeight = (mOverlayPane.getHeight() * Configuration.IMAGE_SCALE_ONLOAD.get());
         double relheightpercent = getImage().getHeight() / defaultHeight;
         double scalefactor = 1 / relheightpercent;
 

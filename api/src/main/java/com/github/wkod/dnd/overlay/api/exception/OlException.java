@@ -7,8 +7,8 @@ public class OlException extends Exception {
      */
     private static final long serialVersionUID = 3383973031359448036L;
 
-    public OlException(Exception e) {
-        super(e);
+    public OlException(Throwable throwable) {
+        super(throwable);
     }
 
 }
