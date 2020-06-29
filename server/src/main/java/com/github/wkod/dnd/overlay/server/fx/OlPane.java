@@ -6,14 +6,14 @@ import java.util.Objects;
 
 import com.github.wkod.dnd.overlay.server.config.Configuration;
 
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
 public class OlPane extends Pane {
 
-    private final double posintervall;
-    private final double posmax = 10;
-    private int posnext = 1;
+    private double posx;
+    private double posy;
 
     private final List<OlImageStack> slotlist = new ArrayList<>();
     private final int slotmin;
@@ -32,7 +32,9 @@ public class OlPane extends Pane {
         setLayoutY(y);
         setWidth(width);
         setHeight(height);
-        posintervall = getWidth() / posmax;
+        
+        posx = 0;
+        posy = 0;
 
         slotmin = (int) (getHeight() * 0.1);
         slotmax = (int) getHeight() - (int) (getHeight() * 0.1);
@@ -44,12 +46,20 @@ public class OlPane extends Pane {
         OlImageStack stack = new OlImageStack(this, name, image);
 
         // set position
-        stack.setLayoutX(posnext++ * posintervall);
-        stack.setLayoutY(0);
-
-        if (posnext > posmax - 2) {
-            posnext = 1;
+        if (posx > 1 && (posx + stack.getBoundsInParent().getWidth()) > getWidth()) {
+            if (posy > 1) {
+                posy = 0;
+            } else {
+                posy = getHeight() * 0.5;
+            }
+            
+            posx = 0;
         }
+        
+        stack.setLayoutX(posx);
+        stack.setLayoutY(posy);
+        
+        posx += stack.getBoundsInParent().getWidth();
 
         // add stack to pane
         getChildren().add(stack);
@@ -84,6 +94,7 @@ public class OlPane extends Pane {
 
     public void clear() {
         getChildren().clear();
-        posnext = 1;
+        posx = 0;
+        posy = 0;
     }
 }
