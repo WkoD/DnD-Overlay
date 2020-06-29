@@ -2,6 +2,7 @@ package com.github.wkod.dnd.overlay.server.fx;
 
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -29,65 +30,64 @@ public class OlStage extends Stage {
         setWidth(width);
         setHeight(height);
 
-        // image pane
-        pane = new OlPane(width, height);
-        Scene scene = new Scene(pane);
-        scene.setFill(Color.TRANSPARENT);
-        setScene(scene);
+        StackPane screenPane = new StackPane();
 
         // background pane
         background = new OlBackground(x, y, width, height);
-        background.hide();
+        background.setVisible(false);
+
+        // data pane
+        pane = new OlPane(x, y, width, height);
+
+        screenPane.getChildren().add(background);
+        screenPane.getChildren().add(pane);
+
+        // set scene
+        Scene scene = new Scene(screenPane);
+        scene.setFill(Color.TRANSPARENT);
+        setScene(scene);
     }
 
-    /**
-     * Sets the background image.
-     * 
-     * @param name  String
-     * @param image Image
-     */
     public void setBackground(String name, Image image) {
         if (image == null) {
             return;
         }
 
-        if (!background.isShowing()) {
-            background.show();
-            pane.toFront();
+        if (!background.isVisible()) {
+            background.setVisible(true);
         }
 
-        background.setImage(name, image);
+        background.set(name, image);
     }
 
     public void toggleBackground() {
-        background.toggle();
+        background.setVisible(!background.isVisible());
     }
 
     public void clearBackground() {
-        if (background.isShowing()) {
-            background.resetImage();
-            background.hide();
-        }
+        background.clear();
+        background.setVisible(false);
     }
 
     public void setImage(String name, Image image) {
-        if (!isShowing()) {
-            show();
+        if (image == null) {
+            return;
         }
-        
-        pane.addImage(new OlImage(pane, name, image));
+
+        if (!pane.isVisible()) {
+            pane.setVisible(true);
+        }
+
+        pane.addImage(name, image);
     }
 
     public void toogleImage() {
-        if (isShowing()) {
-            hide();
-        } else {
-            show();
-        }
+        pane.setVisible(!pane.isVisible());
     }
 
     public void clearImage() {
-        pane.getChildren().clear();
+        pane.clear();
+        pane.setVisible(false);
     }
 
 }

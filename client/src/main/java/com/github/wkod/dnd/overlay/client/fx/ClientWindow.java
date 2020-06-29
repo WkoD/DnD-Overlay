@@ -83,7 +83,7 @@ public class ClientWindow extends Stage {
         setScene(scene);
 
         // update screens if enabled
-        if (Configuration.STARTUP_UPDATE_SCREEN.get()) {
+        if (Configuration.UPDATE_SCREEN_STARTUP.get()) {
             updateScreenListPane();
         }
     }
@@ -215,7 +215,7 @@ public class ClientWindow extends Stage {
             // set events
             // toggle button
             toggle.setOnAction(e -> {
-                LOGGER.debug("Toggle Screen " + screen.getId());
+                LOGGER.debug("Toggle Screen " + screen.getId() + (background.isSelected() ? " BACKG" : " IMAGE"));
                 try {
                     Sender.toggleImageData(screen.getId(), background.isSelected());
                     background.setSelected(false);
@@ -226,7 +226,7 @@ public class ClientWindow extends Stage {
 
             // reset button
             reset.setOnAction(e -> {
-                LOGGER.debug("Reset Screen " + screen.getId());
+                LOGGER.debug("Reset Screen " + screen.getId() + (background.isSelected() ? " BACKG" : " IMAGE"));
                 try {
                     Sender.clearImageData(screen.getId(), background.isSelected());
                     background.setSelected(false);
@@ -251,7 +251,7 @@ public class ClientWindow extends Stage {
 
                 for (final File file : db.getFiles()) {
                     String filename = urlToName(file.getName());
-                    LOGGER.debug("Send to Screen " + screen.getId() + (background.isSelected() ? "  BG " : " IMG ")
+                    LOGGER.debug("Send to Screen " + screen.getId() + (background.isSelected() ? " BACKG " : " IMAGE ")
                             + filename);
                     try (FileInputStream fis = new FileInputStream(file)) {
                         Sender.setImageData(screen.getId(), displayname.isSelected() ? filename : null,
@@ -274,7 +274,7 @@ public class ClientWindow extends Stage {
                         if (cb.hasContent(DataFormat.IMAGE)) {
                             String filename = urlToName(cb.getUrl());
                             LOGGER.debug("Send to Screen " + screen.getId()
-                                    + (background.isSelected() ? "  BG " : " IMG ") + filename);
+                                    + (background.isSelected() ? " BACKG " : " IMAGE ") + filename);
                             Sender.setImageData(screen.getId(), displayname.isSelected() ? filename : null,
                                     imageToByte(cb.getImage()), background.isSelected());
                             background.setSelected(false);

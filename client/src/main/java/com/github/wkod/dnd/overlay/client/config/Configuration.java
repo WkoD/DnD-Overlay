@@ -9,10 +9,10 @@ public class Configuration<T> extends ConfigurationBase<T> {
     public static final Configuration<String> SERVER_PORT = new Configuration<>("server.port", String.class);
     public static final Configuration<String> SERVER_SERVLET_CONTEXT_PATH = new Configuration<>(
             "server.servlet.context-path", String.class);
-    
+
     public static final Configuration<String> LOGGER_LEVEL = new Configuration<>("logger.level", String.class);
-    
-    public static final Configuration<Boolean> STARTUP_UPDATE_SCREEN = new Configuration<>("startup.update.screen",
+
+    public static final Configuration<Boolean> UPDATE_SCREEN_STARTUP = new Configuration<>("update.screen.startup",
             Boolean.class);
 
     private Configuration(String name, Class<?> clazz) {
@@ -22,7 +22,7 @@ public class Configuration<T> extends ConfigurationBase<T> {
     private Configuration(String name, Class<?> clazz, ConfigurationValidator<T> validator) {
         super(name, clazz, validator);
     }
-    
+
     public static void check() throws IllegalArgumentException, IllegalAccessException {
         check(Configuration.class);
     }

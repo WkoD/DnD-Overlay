@@ -10,7 +10,7 @@ public class OlRuntimeException extends RuntimeException {
     public OlRuntimeException(String message) {
         super(message);
     }
-    
+
     public OlRuntimeException(String message, Throwable throwable) {
         super(message, throwable);
     }

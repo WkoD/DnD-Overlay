@@ -24,13 +24,15 @@ public class Sender {
         try {
             Client client = getClient();
             WebTarget target = client.target(getTarget());
-            
-            return target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).get(new GenericType<List<OlScreen>>() {});
+
+            return target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                    .get(new GenericType<List<OlScreen>>() {
+                    });
         } catch (Exception e) {
             throw new OlException(e);
         }
     }
-    
+
     public static void setImageData(int screenid, String name, byte[] data, boolean background) throws OlException {
         try {
             OlData ol = new OlData();
@@ -38,32 +40,32 @@ public class Sender {
             ol.setType(OlDataType.IMAGE);
             ol.setData(data != null ? Base64.getEncoder().encodeToString(data) : null);
             ol.setScreenid(screenid);
-            
+
             Client client = getClient();
             WebTarget target = client.target(getTarget() + (background ? "/background" : "/image"));
-            
+
             target.request(MediaType.APPLICATION_JSON).post(Entity.json(ol), OlData.class);
         } catch (Exception e) {
             throw new OlException(e);
         }
     }
-    
+
     public static void toggleImageData(int screenid, boolean background) throws OlException {
         try {
             Client client = getClient();
             WebTarget target = client.target(getTarget() + (background ? "/background" : "/image") + "/toggle");
-            
+
             target.request(MediaType.APPLICATION_JSON).post(Entity.json(screenid), Integer.class);
         } catch (Exception e) {
             throw new OlException(e);
         }
     }
-    
+
     public static void clearImageData(int screenid, boolean background) throws OlException {
         try {
             Client client = getClient();
             WebTarget target = client.target(getTarget() + (background ? "/background" : "/image") + "/clear");
-            
+
             target.request(MediaType.APPLICATION_JSON).post(Entity.json(screenid), Integer.class);
         } catch (Exception e) {
             throw new OlException(e);
@@ -74,8 +76,9 @@ public class Sender {
         ClientConfig config = new ClientConfig();
         return ClientBuilder.newClient(config);
     }
-    
+
     private static String getTarget() {
-        return "http://" + Configuration.SERVER_HOST.get() + ":" + Configuration.SERVER_PORT.get() + Configuration.SERVER_SERVLET_CONTEXT_PATH.get();
+        return "http://" + Configuration.SERVER_HOST.get() + ":" + Configuration.SERVER_PORT.get()
+                + Configuration.SERVER_SERVLET_CONTEXT_PATH.get();
     }
 }

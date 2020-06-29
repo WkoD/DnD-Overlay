@@ -17,20 +17,22 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
 
+        // load default configuration
+        Configuration.load(new File(Client.class.getClassLoader().getResource("configuration.properties").getFile()));
+
+        // load user configuration
         File configuration = new File("configuration.properties");
 
-        if (!configuration.exists()) {
+        if (configuration.exists()) {
+            Configuration.load(configuration);
+        } else {
             LOGGER.warn("No configuration file was found, internal fallback will be used");
-
-            configuration = new File(Client.class.getClassLoader().getResource("configuration.properties").getFile());
         }
 
-        Configuration.load(configuration);
+        // check configuration values
         try {
             Configuration.check();
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
 
         // set log level
