@@ -6,7 +6,6 @@ import java.util.Objects;
 
 import com.github.wkod.dnd.overlay.server.config.Configuration;
 
-import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
