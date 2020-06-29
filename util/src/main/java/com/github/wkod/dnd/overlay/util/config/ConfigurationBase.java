@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Properties;
 
 import com.github.wkod.dnd.overlay.api.exception.OlRuntimeException;
@@ -28,15 +30,20 @@ public abstract class ConfigurationBase<T> {
      * @param clazz Class<?>
      */
     protected ConfigurationBase(String name, Class<?> clazz) {
-        this(name, clazz, (T value) -> {
-            return true;
-        });
+        this(name, clazz, null);
     }
     
     protected ConfigurationBase(String name, Class<?> clazz, ConfigurationValidator<T> validator) {
         this.name = name;
         this.clazz = clazz;
-        this.validator = validator;
+        
+        if (validator != null) {
+            this.validator = validator;
+        } else {
+            this.validator = (T value) -> {
+                return true;
+            };
+        }
     }
     
     /**
@@ -99,5 +106,21 @@ public abstract class ConfigurationBase<T> {
         Properties clone = new Properties();
         clone.putAll(CONFIGURATION);
         return clone;
+    }
+    
+    /**
+     * Check all declared configuration parameters.
+     * 
+     * @param clazz Class<?>
+     * @throws IllegalArgumentException Exception
+     * @throws IllegalAccessException Exception
+     */
+    protected static void check(Class<?> clazz) throws IllegalArgumentException, IllegalAccessException {
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.getType().equals(clazz) && Modifier.isStatic(field.getModifiers())) {
+                ((ConfigurationBase<?>)field.get(null)).get();
+            }
+        }
     }
 }

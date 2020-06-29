@@ -26,6 +26,12 @@ public class Client {
         }
 
         Configuration.load(configuration);
+        try {
+            Configuration.check();
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         // set log level
         setLogLevel(Configuration.LOGGER_LEVEL.get());

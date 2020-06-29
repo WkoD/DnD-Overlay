@@ -26,4 +26,8 @@ public final class Configuration<T> extends ConfigurationBase<T> {
     private Configuration(String name, Class<?> clazz, ConfigurationValidator<T> validator) {
         super(name, clazz, validator);
     }
+
+    public static void check() throws IllegalArgumentException, IllegalAccessException {
+        check(Configuration.class);
+    }
 }
