@@ -178,14 +178,6 @@ public class OlImageStack extends StackPane {
             this.imagepane.toSlot(this);
             e.consume();
         });
-
-        setOnMouseClicked(e -> {
-            if (MouseButton.PRIMARY.equals(e.getButton())) {
-                setScale(getScale() * 1.1);
-            } else {
-                setScale(getScale() * 0.9);
-            }
-        });
     }
 
     private void setScale(final double scale) {
