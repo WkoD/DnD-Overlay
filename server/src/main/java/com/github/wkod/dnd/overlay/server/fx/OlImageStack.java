@@ -8,7 +8,6 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -41,6 +40,13 @@ public class OlImageStack extends StackPane {
     @Setter
     private boolean slotted = false;
 
+    /**
+     * Constructor.
+     * 
+     * @param imagepane OlPane
+     * @param name      String
+     * @param image     Image
+     */
     public OlImageStack(final OlPane imagepane, final String name, final Image image) {
         // set information
         setId(String.valueOf(idcounter++));
@@ -73,7 +79,7 @@ public class OlImageStack extends StackPane {
             lblname = null;
         }
 
-        // register Events
+        // mouse events
         setOnMousePressed(e -> {
             toFront();
 
@@ -84,6 +90,10 @@ public class OlImageStack extends StackPane {
         setOnMouseDragged(e -> {
             setLayoutX(e.getSceneX() + dragx);
             setLayoutY(e.getSceneY() + dragy);
+        });
+
+        setOnMouseReleased(e -> {
+            checkPosition();
         });
 
         // touch events
@@ -136,25 +146,7 @@ public class OlImageStack extends StackPane {
         setOnTouchReleased(e -> {
             if (Objects.equals(touch1PointId, e.getTouchPoint().getId())) {
                 touch1Active = false;
-
-                // keep part of picture on screen
-                if (getBoundsInParent().getMinX() + Configuration.IMAGE_SIZE_MIN_VISIBLE.get() > this.imagepane
-                        .getWidth()) {
-                    setLayoutX(this.imagepane.getWidth() - Configuration.IMAGE_SIZE_MIN_VISIBLE.get()
-                            - (getBoundsInParent().getMinX() - getLayoutX()));
-                } else if (getBoundsInParent().getMaxX() < Configuration.IMAGE_SIZE_MIN_VISIBLE.get()) {
-                    setLayoutX(Configuration.IMAGE_SIZE_MIN_VISIBLE.get() - getBoundsInParent().getWidth()
-                            - (getBoundsInParent().getMinX() - getLayoutX()));
-                }
-
-                if (getBoundsInParent().getMinY() + Configuration.IMAGE_SIZE_MIN_VISIBLE.get() > this.imagepane
-                        .getHeight()) {
-                    setLayoutY(this.imagepane.getHeight() - Configuration.IMAGE_SIZE_MIN_VISIBLE.get()
-                            - (getBoundsInParent().getMinY() - getLayoutY()));
-                } else if (getBoundsInParent().getMaxY() < Configuration.IMAGE_SIZE_MIN_VISIBLE.get()) {
-                    setLayoutY(Configuration.IMAGE_SIZE_MIN_VISIBLE.get() - getBoundsInParent().getHeight()
-                            - (getBoundsInParent().getMinY() - getLayoutY()));
-                }
+                checkPosition();
             } else if (Objects.equals(touch2PointId, e.getTouchPoint().getId())) {
                 touch2Active = false;
             }
@@ -180,15 +172,51 @@ public class OlImageStack extends StackPane {
         });
     }
 
+    /**
+     * Check if current stack position is outside of minimum screen boundaries and
+     * change them if necessary.
+     */
+    private void checkPosition() {
+        // keep part of picture on screen
+        if (getBoundsInParent().getMinX() + Configuration.IMAGE_SIZE_MIN_VISIBLE.get() > this.imagepane.getWidth()) {
+            setLayoutX(this.imagepane.getWidth() - Configuration.IMAGE_SIZE_MIN_VISIBLE.get()
+                    - (getBoundsInParent().getMinX() - getLayoutX()));
+        } else if (getBoundsInParent().getMaxX() < Configuration.IMAGE_SIZE_MIN_VISIBLE.get()) {
+            setLayoutX(Configuration.IMAGE_SIZE_MIN_VISIBLE.get() - getBoundsInParent().getWidth()
+                    - (getBoundsInParent().getMinX() - getLayoutX()));
+        }
+
+        if (getBoundsInParent().getMinY() + Configuration.IMAGE_SIZE_MIN_VISIBLE.get() > this.imagepane.getHeight()) {
+            setLayoutY(this.imagepane.getHeight() - Configuration.IMAGE_SIZE_MIN_VISIBLE.get()
+                    - (getBoundsInParent().getMinY() - getLayoutY()));
+        } else if (getBoundsInParent().getMaxY() < Configuration.IMAGE_SIZE_MIN_VISIBLE.get()) {
+            setLayoutY(Configuration.IMAGE_SIZE_MIN_VISIBLE.get() - getBoundsInParent().getHeight()
+                    - (getBoundsInParent().getMinY() - getLayoutY()));
+        }
+    }
+
+    /**
+     * Set scaling factor for image.
+     * 
+     * @param scale double
+     */
     private void setScale(final double scale) {
         imageview.setFitHeight(
                 (imageview.getBoundsInParent().getMaxY() - imageview.getBoundsInParent().getMinY()) * scale);
     }
 
+    /**
+     * Get scaling factor of image.
+     * 
+     * @return double
+     */
     private double getScale() {
         return imageview.getScaleY();
     }
 
+    /**
+     * Scale image according to default value.
+     */
     private void defaultScale() {
         double defaultHeight = (imagepane.getHeight() * Configuration.IMAGE_SCALE_ONLOAD.get());
         double relheightpercent = imageview.getImage().getHeight() / defaultHeight;
