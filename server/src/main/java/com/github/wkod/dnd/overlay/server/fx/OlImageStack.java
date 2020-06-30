@@ -218,7 +218,7 @@ public class OlImageStack extends StackPane {
      * Scale image according to default value.
      */
     private void defaultScale() {
-        double defaultHeight = (imagepane.getHeight() * Configuration.IMAGE_SCALE_ONLOAD.get());
+        double defaultHeight = (imagepane.getHeight() * Configuration.IMAGE_SIZE_SCALE_ONLOAD.get());
         double relheightpercent = imageview.getImage().getHeight() / defaultHeight;
         double scalefactor = 1 / relheightpercent;
 

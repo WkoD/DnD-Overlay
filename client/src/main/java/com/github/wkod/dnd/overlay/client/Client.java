@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.wkod.dnd.overlay.api.exception.OlRuntimeException;
 import com.github.wkod.dnd.overlay.client.config.Configuration;
 import com.github.wkod.dnd.overlay.client.fx.ClientFx;
 
@@ -15,24 +16,26 @@ public class Client {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
-        // load default configuration
-        Configuration.load(new File(Client.class.getClassLoader().getResource("configuration.properties").getFile()));
-
-        // load user configuration
-        File configuration = new File("configuration.properties");
-
-        if (configuration.exists()) {
-            Configuration.load(configuration);
-        } else {
-            LOGGER.warn("No configuration file was found, internal fallback will be used");
-        }
-
-        // check configuration values
         try {
+            // load default configuration
+            Configuration
+                    .load(new File(Client.class.getClassLoader().getResource("configuration.properties").getFile()));
+
+            // load user configuration
+            File configuration = new File("configuration.properties");
+
+            if (configuration.exists()) {
+                Configuration.load(configuration);
+            } else {
+                LOGGER.warn("No configuration file was found, internal fallback will be used");
+            }
+
+            // check configuration values
             Configuration.check();
-        } catch (IllegalArgumentException | IllegalAccessException e) {
+        } catch (IOException | OlRuntimeException e) {
+            LOGGER.error("Error while loading configuration: " + e.getMessage(), e);
         }
 
         // set log level
