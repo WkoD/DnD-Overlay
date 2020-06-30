@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.github.wkod.dnd.overlay.server.config.Configuration;
 import com.github.wkod.dnd.overlay.server.fx.ServerFx;
+import com.github.wkod.dnd.overlay.util.log.LogUtils;
 
 import ch.qos.logback.classic.Level;
 import javafx.application.Application;
@@ -26,15 +27,9 @@ public class Server {
                 Configuration.class);
 
         // set log level
-        setLogLevel(Configuration.LOGGER_LEVEL.get());
+        LogUtils.setLogLevel(Configuration.LOGGER_LEVEL.get());
 
         Application.launch(ServerFx.class, args);
-    }
-
-    private static void setLogLevel(String level) {
-        ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory
-                .getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
-        logger.setLevel(Level.toLevel(level, logger.getLevel()));
     }
 
     @PreDestroy
