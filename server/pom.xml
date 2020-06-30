@@ -54,31 +54,7 @@
 						</goals>
 						<configuration>
 							<mainClass>com.github.wkod.dnd.overlay.server.Server</mainClass>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target</outputDirectory>
-							<encoding>UTF-8</encoding>
-							<resources>
-								<resource>
-									<directory>${basedir}/src/main/resources</directory>
-									<includes>
-										<include>configuration.properties</include>
-									</includes>
-								</resource>
-							</resources>
+							<addResources>true</addResources>
 						</configuration>
 					</execution>
 				</executions>
