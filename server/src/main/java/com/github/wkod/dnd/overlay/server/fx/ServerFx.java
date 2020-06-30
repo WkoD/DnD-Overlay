@@ -22,6 +22,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class ServerFx extends Application {
 
@@ -70,8 +71,19 @@ public class ServerFx extends Application {
         screenMap.clear();
         int index = 0;
 
+        // set primary stage without taskbar entry and no actual visible window
+        primaryStage.initStyle(StageStyle.UTILITY);
+        primaryStage.setOpacity(0);
+        primaryStage.setHeight(0);
+        primaryStage.setWidth(0);
+        primaryStage.show();
+        
         for (Screen screen : Screen.getScreens()) {
             OlStage stage = new OlStage(screen.getX(), screen.getY(), screen.getWidth(), screen.getHeight());
+            
+            // set stage as sub stage of primary to get rid of taskbar entries
+            stage.initOwner(primaryStage);
+            
             stage.show();
             screenMap.put(index++, stage);
         }
