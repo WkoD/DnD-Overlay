@@ -2,13 +2,9 @@ package com.github.wkod.dnd.overlay.client;
 
 import java.io.File;
 
-import org.slf4j.LoggerFactory;
-
 import com.github.wkod.dnd.overlay.client.config.Configuration;
 import com.github.wkod.dnd.overlay.client.fx.ClientFx;
 import com.github.wkod.dnd.overlay.util.log.LogUtils;
-
-import ch.qos.logback.classic.Level;
 
 public class Client {
 

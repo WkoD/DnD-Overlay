@@ -5,14 +5,12 @@ import java.io.IOException;
 
 import javax.annotation.PreDestroy;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.github.wkod.dnd.overlay.server.config.Configuration;
 import com.github.wkod.dnd.overlay.server.fx.ServerFx;
 import com.github.wkod.dnd.overlay.util.log.LogUtils;
 
-import ch.qos.logback.classic.Level;
 import javafx.application.Application;
 import javafx.application.Platform;
 

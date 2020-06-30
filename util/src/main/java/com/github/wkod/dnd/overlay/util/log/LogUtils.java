@@ -11,7 +11,7 @@ public final class LogUtils {
      */
     private LogUtils() {
     }
-    
+
     /**
      * Set log level of root logger.
      * 

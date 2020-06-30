@@ -92,21 +92,21 @@ public abstract class ConfigurationBase<T> {
             if (internal == null) {
                 throw new OlRuntimeException("Internal configuration is missing");
             }
-    
+
             CONFIGURATION.load(internal);
-    
+
             // load from file
             if (file == null || !file.exists()) {
                 return;
             }
-    
+
             try (InputStream is = new FileInputStream(file)) {
                 CONFIGURATION.load(is);
             }
         } catch (IOException e) {
             throw new OlRuntimeException("Error while reading configuration");
         }
-        
+
         try {
             check(clazz);
         } catch (IllegalArgumentException | IllegalAccessException e) {
