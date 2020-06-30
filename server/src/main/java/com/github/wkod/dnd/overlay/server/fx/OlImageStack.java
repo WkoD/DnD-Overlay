@@ -54,7 +54,7 @@ public class OlImageStack extends StackPane {
         this.name = name;
 
         if (!Configuration.IMAGE_TRANSPARENCY.get()) {
-            setStyle("-fx-background-color: white;");
+            setStyle("-fx-background-color: white; -fx-background-insets: 1 1 1 1;");
         }
 
         // add image
