@@ -27,6 +27,7 @@ public class OlImageStack extends StackPane {
 
     private double dragx;
     private double dragy;
+    private double rotate;
 
     private int touch1PointId;
     private boolean touch1Active;
@@ -81,19 +82,28 @@ public class OlImageStack extends StackPane {
 
         // mouse events
         setOnMousePressed(e -> {
-            toFront();
-
             dragx = getLayoutX() - e.getSceneX();
             dragy = getLayoutY() - e.getSceneY();
+            rotate = getRotate();
+            
+            toFront();
+            e.consume();
         });
 
         setOnMouseDragged(e -> {
-            setLayoutX(e.getSceneX() + dragx);
-            setLayoutY(e.getSceneY() + dragy);
+            if (e.isControlDown()) {
+                setRotate(e.getSceneX() + dragx + rotate);
+            } else {
+                setLayoutX(e.getSceneX() + dragx);
+                setLayoutY(e.getSceneY() + dragy);
+            }
+            
+            e.consume();
         });
 
         setOnMouseReleased(e -> {
             checkPosition();
+            e.consume();
         });
 
         // touch events
