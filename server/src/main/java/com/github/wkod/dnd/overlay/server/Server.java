@@ -5,11 +5,9 @@ import java.io.IOException;
 
 import javax.annotation.PreDestroy;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.github.wkod.dnd.overlay.api.exception.OlRuntimeException;
 import com.github.wkod.dnd.overlay.server.config.Configuration;
 import com.github.wkod.dnd.overlay.server.fx.ServerFx;
 
@@ -20,29 +18,12 @@ import javafx.application.Platform;
 @SpringBootApplication
 public class Server {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
-
     public static void main(String[] args) throws IOException {
 
-        try {
-            // load default configuration
-            Configuration
-                    .load(new File(Server.class.getClassLoader().getResource("configuration.properties").getFile()));
+        File configuration = args.length > 0 ? new File(args[0]) : null;
 
-            // load user configuration
-            File configuration = new File("configuration.properties");
-
-            if (configuration.exists()) {
-                Configuration.load(configuration);
-            } else {
-                LOGGER.warn("No configuration file was found, internal fallback will be used");
-            }
-
-            // check configuration values
-            Configuration.check();
-        } catch (IOException | OlRuntimeException e) {
-            LOGGER.error("Error while loading configuration: " + e.getMessage(), e);
-        }
+        Configuration.load(configuration, Server.class.getClassLoader().getResourceAsStream("configuration.properties"),
+                Configuration.class);
 
         // set log level
         setLogLevel(Configuration.LOGGER_LEVEL.get());

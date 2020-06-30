@@ -82,19 +82,52 @@ public abstract class ConfigurationBase<T> {
     /**
      * Read configuration from file.
      * 
+     * @param file     File
+     * @param internal InputStream
+     */
+    public static void load(File file, InputStream internal, Class<?> clazz) {
+
+        try {
+            // load default configuration
+            if (internal == null) {
+                throw new OlRuntimeException("Internal configuration is missing");
+            }
+    
+            CONFIGURATION.load(internal);
+    
+            // load from file
+            if (file == null || !file.exists()) {
+                return;
+            }
+    
+            try (InputStream is = new FileInputStream(file)) {
+                CONFIGURATION.load(is);
+            }
+        } catch (IOException e) {
+            throw new OlRuntimeException("Error while reading configuration");
+        }
+        
+        try {
+            check(clazz);
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            throw new OlRuntimeException("Error while validating configuration", e);
+        }
+    }
+
+    /**
+     * Read configuration from inputstream.
+     * 
      * @param configfile File
      * @throws IOException Exception
      */
-    public static void load(final File configfile) throws IOException {
+    public static void load(final InputStream stream) throws IOException {
 
         // ignore missing files
-        if (configfile == null || !configfile.exists()) {
+        if (stream == null) {
             return;
         }
 
-        try (InputStream is = new FileInputStream(configfile)) {
-            CONFIGURATION.load(is);
-        }
+        CONFIGURATION.load(stream);
     }
 
     /**

@@ -10,6 +10,7 @@
 	<properties>
 		<java.version>13</java.version>
 		<openjfx.version>13</openjfx.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<springboot.version>2.2.6.RELEASE</springboot.version>
 	</properties>
 	<modules>
@@ -23,12 +24,12 @@
 			<dependency>
 				<groupId>com.github.wkod.dnd.overlay</groupId>
 				<artifactId>api</artifactId>
-				<version>${version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.github.wkod.dnd.overlay</groupId>
 				<artifactId>util</artifactId>
-				<version>${version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
@@ -66,9 +67,27 @@
 			<plugins>
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
 					<configuration>
 						<source>${java.version}</source>
 						<target>${java.version}</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>${springboot.version}</version>
+					<configuration>
+						<excludes>
+							<exclude>
+								<groupId>org.projectlombok</groupId>
+								<artifactId>lombok</artifactId>
+							</exclude>
+						</excludes>
 					</configuration>
 				</plugin>
 			</plugins>
