@@ -109,7 +109,7 @@ public class OlImageStack extends StackPane {
         });
 
         setOnScroll(e -> {
-            setScale(e.getDeltaY() < 0 ? (getScale() / 1.1) : (getScale() * 1.1));
+            setScale(e.getDeltaY() > 0 ? (getScale() / 1.1) : (getScale() * 1.1));
             e.consume();
         });
 
