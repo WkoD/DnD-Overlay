@@ -1,5 +1,7 @@
 package com.github.wkod.dnd.overlay.server.fx;
 
+import static com.github.wkod.dnd.overlay.api.localization.Messages.*;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,14 +10,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.cal10n.LocLogger;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import com.github.wkod.dnd.overlay.api.OlScreen;
 import com.github.wkod.dnd.overlay.server.Server;
 import com.github.wkod.dnd.overlay.server.config.Configuration;
+import com.github.wkod.dnd.overlay.util.Utils;
 import com.sun.glass.ui.Screen;
 
 import javafx.application.Application;
@@ -26,7 +28,7 @@ import javafx.stage.StageStyle;
 
 public class ServerFx extends Application {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServerFx.class);
+    private static final LocLogger LOGGER = Utils.getLogger(ServerFx.class);
 
     /**
      * Spring context.
@@ -139,7 +141,7 @@ public class ServerFx extends Application {
                             stage.setImage(name, new Image(is));
                         }
                     } catch (IOException e) {
-                        LOGGER.error(e.getMessage(), e);
+                        LOGGER.error(SERVER_DATA_TRANSFER_ERROR, e);
                     }
                 }
             });

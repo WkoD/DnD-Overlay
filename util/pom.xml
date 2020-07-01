@@ -1,23 +1,26 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.github.wkod.dnd</groupId>
-		<artifactId>overlay</artifactId>
-		<version>0.1.0</version>
-	</parent>
-	<groupId>com.github.wkod.dnd.overlay</groupId>
-	<artifactId>util</artifactId>
-	<name>DnD-Overlay-Util</name>
-	<dependencies>
-		<dependency>
-			<groupId>com.github.wkod.dnd.overlay</groupId>
-			<artifactId>api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-		</dependency>
-	</dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.github.wkod.dnd</groupId>
+        <artifactId>overlay</artifactId>
+        <version>0.1.0</version>
+    </parent>
+    <groupId>com.github.wkod.dnd.overlay</groupId>
+    <artifactId>util</artifactId>
+    <name>DnD-Overlay-Util</name>
+    <dependencies>
+        <dependency>
+            <groupId>com.github.wkod.dnd.overlay</groupId>
+            <artifactId>api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-ext</artifactId>
+        </dependency>
+    </dependencies>
 </project>

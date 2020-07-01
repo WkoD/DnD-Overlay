@@ -1,5 +1,8 @@
 package com.github.wkod.dnd.overlay.client.fx;
 
+import static com.github.wkod.dnd.overlay.api.localization.Label.*;
+import static com.github.wkod.dnd.overlay.api.localization.Messages.*;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -11,18 +14,16 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.cal10n.LocLogger;
 
 import com.github.wkod.dnd.overlay.api.OlScreen;
 import com.github.wkod.dnd.overlay.api.exception.OlException;
 import com.github.wkod.dnd.overlay.client.config.Configuration;
 import com.github.wkod.dnd.overlay.client.rest.Sender;
+import com.github.wkod.dnd.overlay.util.Utils;
 
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -54,7 +55,7 @@ import javafx.stage.Stage;
  */
 public class ClientWindow extends Stage {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientWindow.class);
+    private static final LocLogger LOGGER = Utils.getLogger(ClientWindow.class);
 
     private final List<OlScreen> screenList = new ArrayList<>();
     private final HBox screenListPane;
@@ -90,10 +91,10 @@ public class ClientWindow extends Stage {
 
     private MenuBar createMenu() {
         // create menu elements
-        Menu menu = new Menu("Menu");
-        MenuItem screens = new MenuItem("Read Screens");
-        MenuItem console = new MenuItem("Toggle Console");
-        MenuItem exit = new MenuItem("Exit");
+        Menu menu = new Menu(CLIENT_MENU.localize());
+        MenuItem screens = new MenuItem(CLIENT_MENU_READ_SCREENS.localize());
+        MenuItem console = new MenuItem(CLIENT_MENU_TOGGLE_CONSOLE.localize());
+        MenuItem exit = new MenuItem(CLIENT_MENU_EXIT.localize());
 
         menu.getItems().add(screens);
         menu.getItems().add(console);
@@ -104,29 +105,23 @@ public class ClientWindow extends Stage {
         menubar.getMenus().add(menu);
 
         // set events
-        screens.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent pEvent) {
-                updateScreenListPane();
-            }
+        screens.setOnAction(e -> {
+            updateScreenListPane();
+            e.consume();
         });
 
-        console.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent pEvent) {
-                Node node = ((BorderPane) (menubar.getParent())).getBottom();
+        console.setOnAction(e -> {
+            Node node = ((BorderPane) (menubar.getParent())).getBottom();
 
-                boolean togglestate = !node.isVisible();
-                node.setManaged(togglestate);
-                node.setVisible(togglestate);
-            }
+            boolean togglestate = !node.isVisible();
+            node.setManaged(togglestate);
+            node.setVisible(togglestate);
+            e.consume();
         });
 
-        exit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent pEvent) {
-                Platform.exit();
-            }
+        exit.setOnAction(e -> {
+            Platform.exit();
+            e.consume();
         });
 
         setOnCloseRequest(e -> {
@@ -152,14 +147,10 @@ public class ClientWindow extends Stage {
         screenList.clear();
         screenListPane.getChildren().clear();
 
-        try {
-            List<OlScreen> list = Sender.getScreens();
+        List<OlScreen> list = Sender.getScreens();
 
-            if (list != null) {
-                screenList.addAll(list);
-            }
-        } catch (OlException e) {
-            LOGGER.error(e.getMessage(), e);
+        if (list != null) {
+            screenList.addAll(list);
         }
 
         for (OlScreen screen : screenList) {
@@ -194,45 +185,41 @@ public class ClientWindow extends Stage {
             CheckBox background = new CheckBox();
             background.setId("background " + screen.getId());
             background.setAlignment(Pos.BOTTOM_LEFT);
-            background.setText("Background");
+            background.setText(CLIENT_CHECKBOX_BACKGROUND.localize());
             background.setIndeterminate(false);
             background.setSelected(false);
 
             CheckBox displayname = new CheckBox();
             displayname.setAlignment(Pos.BOTTOM_LEFT);
-            displayname.setText("Display name");
+            displayname.setText(CLIENT_CHECKBOX_DISPLAY_NAME.localize());
             displayname.setIndeterminate(false);
             displayname.setSelected(false);
 
             Button toggle = new Button();
             toggle.setAlignment(Pos.BOTTOM_LEFT);
-            toggle.setText("Toggle");
+            toggle.setText(CLIENT_BUTTON_TOGGLE.localize());
 
             Button reset = new Button();
             reset.setAlignment(Pos.BOTTOM_LEFT);
-            reset.setText("Reset");
+            reset.setText(CLIENT_BUTTON_RESET.localize());
 
             // set events
             // toggle button
             toggle.setOnAction(e -> {
-                LOGGER.debug("Toggle Screen " + screen.getId() + (background.isSelected() ? " BACKG" : " IMAGE"));
-                try {
-                    Sender.toggleImageData(screen.getId(), background.isSelected());
-                    background.setSelected(false);
-                } catch (OlException e1) {
-                    LOGGER.error(e1.getMessage(), e1);
-                }
+                LOGGER.info(CLIENT_SCREEN_TOGGLE, screen.getId(),
+                        (background.isSelected() ? background.getText() : ""));
+                Sender.toggleImageData(screen.getId(), background.isSelected());
+                background.setSelected(false);
+                e.consume();
             });
 
             // reset button
             reset.setOnAction(e -> {
-                LOGGER.debug("Reset Screen " + screen.getId() + (background.isSelected() ? " BACKG" : " IMAGE"));
-                try {
-                    Sender.clearImageData(screen.getId(), background.isSelected());
-                    background.setSelected(false);
-                } catch (OlException e1) {
-                    LOGGER.error(e1.getMessage(), e1);
-                }
+                LOGGER.debug(CLIENT_SCREEN_RESET, screen.getId(),
+                        (background.isSelected() ? background.getText() : ""));
+                Sender.clearImageData(screen.getId(), background.isSelected());
+                background.setSelected(false);
+                e.consume();
             });
 
             // drag and drop
@@ -251,14 +238,14 @@ public class ClientWindow extends Stage {
 
                 for (final File file : db.getFiles()) {
                     String filename = urlToName(file.getName());
-                    LOGGER.debug("Send to Screen " + screen.getId() + (background.isSelected() ? " BACKG " : " IMAGE ")
-                            + filename);
+                    LOGGER.info(CLIENT_DATA_TRANSFER, screen.getId(), filename,
+                            (background.isSelected() ? background.getText() : ""));
                     try (FileInputStream fis = new FileInputStream(file)) {
                         Sender.setImageData(screen.getId(), displayname.isSelected() ? filename : null,
                                 imageToByte(new Image(fis)), background.isSelected());
                         background.setSelected(false);
                     } catch (IOException | OlException e1) {
-                        LOGGER.error(e1.getMessage(), e1);
+                        LOGGER.error(CLIENT_DATA_TRANSFER_ERROR, e1);
                     }
                 }
 
@@ -273,14 +260,14 @@ public class ClientWindow extends Stage {
                     try {
                         if (cb.hasContent(DataFormat.IMAGE)) {
                             String filename = urlToName(cb.getUrl());
-                            LOGGER.debug("Send to Screen " + screen.getId()
-                                    + (background.isSelected() ? " BACKG " : " IMAGE ") + filename);
+                            LOGGER.info(CLIENT_DATA_TRANSFER, screen.getId(), filename,
+                                    (background.isSelected() ? background.getText() : ""));
                             Sender.setImageData(screen.getId(), displayname.isSelected() ? filename : null,
                                     imageToByte(cb.getImage()), background.isSelected());
                             background.setSelected(false);
                         }
                     } catch (IOException | OlException e1) {
-                        LOGGER.error(e1.getMessage(), e1);
+                        LOGGER.error(CLIENT_DATA_TRANSFER_ERROR, e1);
                     }
                 }
 
@@ -306,11 +293,11 @@ public class ClientWindow extends Stage {
         }
     }
 
-    private static byte[] imageToByte(Image image) throws IOException {
+    private static byte[] imageToByte(Image image) throws IOException, OlException {
         BufferedImage bimage = SwingFXUtils.fromFXImage(image, null);
 
         if (bimage == null) {
-            throw new IOException("Image can't be read");
+            throw new OlException(CLIENT_DATA_INVALID_IMAGE);
         }
 
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {

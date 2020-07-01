@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.github.wkod.dnd.overlay.server.config.Configuration;
 import com.github.wkod.dnd.overlay.server.fx.ServerFx;
-import com.github.wkod.dnd.overlay.util.log.LogUtils;
+import com.github.wkod.dnd.overlay.util.Utils;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -25,7 +25,7 @@ public class Server {
                 Configuration.class);
 
         // set log level
-        LogUtils.setLogLevel(Configuration.LOGGER_LEVEL.get());
+        Utils.setRootLogger(Configuration.LOGGER_LOCALE.get(), Configuration.LOGGER_LEVEL.get());
 
         Application.launch(ServerFx.class, args);
     }

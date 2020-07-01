@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Locale;
 import java.util.Properties;
 
 import com.github.wkod.dnd.overlay.api.exception.OlRuntimeException;
+import com.github.wkod.dnd.overlay.api.localization.Messages;
 
 public abstract class ConfigurationBase<T> {
 
@@ -47,7 +49,7 @@ public abstract class ConfigurationBase<T> {
     }
 
     /**
-     * Get the value of a property cast into its specific type.
+     * Get the value of the property cast into its specific type.
      * 
      * @return T
      */
@@ -63,20 +65,33 @@ public abstract class ConfigurationBase<T> {
                 value = (T) Integer.valueOf(valuestring);
             } else if (clazz.isAssignableFrom(Double.class)) {
                 value = (T) Double.valueOf(valuestring);
+            } else if (clazz.isAssignableFrom(Locale.class)) {
+                value = (T) Locale.forLanguageTag(valuestring);
             } else {
                 value = (T) valuestring;
             }
         } catch (NumberFormatException e) {
-            throw new OlRuntimeException(
-                    "Invalid value \"" + valuestring + "\" for configuration \"" + this.name + "\"", e);
+            throw new OlRuntimeException(Messages.CONFIGURATION_INVALID, valuestring, name, e);
         }
 
         if (value == null || !this.validator.validate(value)) {
-            throw new OlRuntimeException(
-                    "Invalid value \"" + valuestring + "\" for configuration \"" + this.name + "\"");
+            throw new OlRuntimeException(Messages.CONFIGURATION_INVALID, valuestring);
         }
 
         return value;
+    }
+
+    /**
+     * Set value of the property
+     * 
+     * @param value T
+     */
+    public void set(T value) {
+        if (value == null || !this.validator.validate(value)) {
+            throw new OlRuntimeException(Messages.CONFIGURATION_INVALID, String.valueOf(value));
+        }
+
+        CONFIGURATION.setProperty(name, String.valueOf(value));
     }
 
     /**
@@ -89,14 +104,17 @@ public abstract class ConfigurationBase<T> {
 
         try {
             // load default configuration
-            if (internal == null) {
-                throw new OlRuntimeException("Internal configuration is missing");
+            if (internal != null) {
+                CONFIGURATION.load(internal);
             }
-
-            CONFIGURATION.load(internal);
 
             // load from file
             if (file == null || !file.exists()) {
+                if (internal == null) {
+                    // no internal or external configuration found
+                    throw new OlRuntimeException(Messages.CONFIGURATION_ERROR);
+                }
+                
                 return;
             }
 
@@ -104,13 +122,13 @@ public abstract class ConfigurationBase<T> {
                 CONFIGURATION.load(is);
             }
         } catch (IOException e) {
-            throw new OlRuntimeException("Error while reading configuration");
+            throw new OlRuntimeException(Messages.CONFIGURATION_ERROR, e);
         }
 
         try {
             check(clazz);
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            throw new OlRuntimeException("Error while validating configuration", e);
+            throw new OlRuntimeException(Messages.CONFIGURATION_ERROR, e);
         }
     }
 

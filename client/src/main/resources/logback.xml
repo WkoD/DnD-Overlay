@@ -8,7 +8,7 @@
 
     <appender name="TextAreaAppender" class="com.github.wkod.dnd.overlay.client.fx.StaticOutputStreamAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{5} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %-5level - %msg%n</pattern>
         </encoder>
     </appender>
 
