@@ -28,6 +28,7 @@ public class OlImageStack extends StackPane {
     private double dragx;
     private double dragy;
     private double rotate;
+    private double rotatex;
 
     private int touch1PointId;
     private boolean touch1Active;
@@ -85,24 +86,30 @@ public class OlImageStack extends StackPane {
             dragx = getLayoutX() - e.getSceneX();
             dragy = getLayoutY() - e.getSceneY();
             rotate = getRotate();
-            
+            rotatex = e.getSceneX();
+
             toFront();
             e.consume();
         });
 
         setOnMouseDragged(e -> {
             if (e.isControlDown()) {
-                setRotate(e.getSceneX() + dragx + rotate);
+                setRotate(rotate - (rotatex - e.getSceneX()));
             } else {
                 setLayoutX(e.getSceneX() + dragx);
                 setLayoutY(e.getSceneY() + dragy);
             }
-            
+
             e.consume();
         });
 
         setOnMouseReleased(e -> {
             checkPosition();
+            e.consume();
+        });
+
+        setOnScroll(e -> {
+            setScale(e.getDeltaY() < 0 ? (getScale() / 1.1) : (getScale() * 1.1));
             e.consume();
         });
 
@@ -211,8 +218,12 @@ public class OlImageStack extends StackPane {
      * @param scale double
      */
     private void setScale(final double scale) {
-        imageview.setFitHeight(
-                (imageview.getBoundsInParent().getMaxY() - imageview.getBoundsInParent().getMinY()) * scale);
+        double heightold = (imageview.getBoundsInParent().getMaxY() - imageview.getBoundsInParent().getMinY());
+        double heightnew = heightold * scale;
+
+        setLayoutX(getLayoutX() + (heightold - heightnew) * 0.5);
+        setLayoutY(getLayoutY() + (heightold - heightnew) * 0.5);
+        imageview.setFitHeight(heightnew);
     }
 
     /**
