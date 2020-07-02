@@ -1,7 +1,7 @@
 package com.github.wkod.dnd.overlay.client.fx;
 
-import static com.github.wkod.dnd.overlay.api.localization.Label.*;
 import static com.github.wkod.dnd.overlay.api.localization.Messages.*;
+import static com.github.wkod.dnd.overlay.client.fx.localization.Label.*;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;

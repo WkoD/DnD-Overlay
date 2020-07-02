@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.github.wkod.dnd</groupId>
         <artifactId>overlay</artifactId>
-        <version>0.1.0</version>
+        <version>0.2.0</version>
     </parent>
     <groupId>com.github.wkod.dnd.overlay</groupId>
     <artifactId>client</artifactId>
@@ -44,6 +44,14 @@
         </dependency>
     </dependencies>
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

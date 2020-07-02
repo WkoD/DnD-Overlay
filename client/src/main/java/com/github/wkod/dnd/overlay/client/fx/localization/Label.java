@@ -1,4 +1,6 @@
-package com.github.wkod.dnd.overlay.api.localization;
+package com.github.wkod.dnd.overlay.client.fx.localization;
+
+import com.github.wkod.dnd.overlay.api.localization.Localizable;
 
 import ch.qos.cal10n.BaseName;
 import ch.qos.cal10n.Locale;
