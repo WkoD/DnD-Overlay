@@ -15,6 +15,7 @@ import com.github.wkod.dnd.overlay.api.OlScreen;
 import com.github.wkod.dnd.overlay.client.rest.Sender;
 import com.github.wkod.dnd.overlay.util.Utils;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -24,7 +25,11 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class OlScreenBox extends VBox {
@@ -46,9 +51,11 @@ public class OlScreenBox extends VBox {
         setSelected(false);
 
         setId(String.valueOf(this.screen.getId())); // set id to screen id
+
         setMinWidth(150);
         setMinHeight(100);
         setAlignment(Pos.BASELINE_CENTER);
+        setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(4.0), new Insets(2.0))));
 
         // set screen information as labels
         Label id = new Label(String.valueOf(this.screen.getId()));
@@ -185,14 +192,14 @@ public class OlScreenBox extends VBox {
     private void setSelected(boolean selected) {
         if (selected) {
             setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;" + "-fx-border-width: 2;"
-                    + "-fx-border-insets: 5;" + "-fx-border-radius: 5;" + "-fx-border-color: lightblue;");
+                    + "-fx-border-insets: 2;" + "-fx-border-radius: 4;" + "-fx-border-color: lightblue;");
         } else {
             if (screen.isMain()) {
                 setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;" + "-fx-border-width: 2;"
-                        + "-fx-border-insets: 5;" + "-fx-border-radius: 5;" + "-fx-border-color: green;");
+                        + "-fx-border-insets: 2;" + "-fx-border-radius: 4;" + "-fx-border-color: green;");
             } else {
                 setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;" + "-fx-border-width: 2;"
-                        + "-fx-border-insets: 5;" + "-fx-border-radius: 5;" + "-fx-border-color: black;");
+                        + "-fx-border-insets: 2;" + "-fx-border-radius: 4;" + "-fx-border-color: black;");
             }
         }
     }

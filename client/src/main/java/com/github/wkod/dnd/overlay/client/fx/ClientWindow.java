@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -30,6 +31,8 @@ import javafx.stage.Stage;
  * @version 1.0
  */
 public class ClientWindow extends Stage {
+
+    private Menu screensmenu;
 
     private final List<OlScreenBox> screenBoxList = new ArrayList<>();
     private final HBox screenBoxPane;
@@ -66,25 +69,32 @@ public class ClientWindow extends Stage {
     private MenuBar createMenu() {
         // create menu elements
         Menu menu = new Menu(CLIENT_MENU.localize());
-        MenuItem screens = new MenuItem(CLIENT_MENU_READ_SCREENS.localize());
-        MenuItem console = new MenuItem(CLIENT_MENU_TOGGLE_CONSOLE.localize());
+        MenuItem readscreens = new MenuItem(CLIENT_MENU_READ_SCREENS.localize());
+        MenuItem toggleconsole = new MenuItem(CLIENT_MENU_TOGGLE_CONSOLE.localize());
         MenuItem exit = new MenuItem(CLIENT_MENU_EXIT.localize());
 
-        menu.getItems().add(screens);
-        menu.getItems().add(console);
+        menu.getItems().add(readscreens);
+        menu.getItems().add(toggleconsole);
         menu.getItems().add(exit);
+
+        screensmenu = new Menu(CLIENT_SCREENS.localize());
+        MenuItem allscreens = new MenuItem(CLIENT_SCREENS_ALL.localize());
+
+        screensmenu.getItems().add(allscreens);
+        screensmenu.getItems().add(new SeparatorMenuItem());
 
         // create menu bar
         MenuBar menubar = new MenuBar();
         menubar.getMenus().add(menu);
+        menubar.getMenus().add(screensmenu);
 
         // set events
-        screens.setOnAction(e -> {
+        readscreens.setOnAction(e -> {
             updateScreenListPane();
             e.consume();
         });
 
-        console.setOnAction(e -> {
+        toggleconsole.setOnAction(e -> {
             Node node = ((BorderPane) (menubar.getParent())).getBottom();
 
             boolean togglestate = !node.isVisible();
@@ -100,6 +110,14 @@ public class ClientWindow extends Stage {
 
         setOnCloseRequest(e -> {
             Platform.exit();
+        });
+
+        allscreens.setOnAction(e -> {
+            for (MenuItem item : screensmenu.getItems()) {
+                if (item instanceof ScreenMenuItem) {
+                    ((ScreenMenuItem)item).enable();
+                }
+            }
         });
 
         return menubar;
@@ -121,6 +139,11 @@ public class ClientWindow extends Stage {
         screenBoxList.clear();
         screenBoxPane.getChildren().clear();
 
+        // remove screens from menu
+        if (screensmenu.getItems().size() > 2) {
+            screensmenu.getItems().remove(3, screensmenu.getItems().size());
+        }
+
         List<OlScreen> list = Sender.getScreens();
 
         if (list == null) {
@@ -135,6 +158,9 @@ public class ClientWindow extends Stage {
             HBox.setHgrow(pane, Priority.ALWAYS);
             screenBoxPane.getChildren().add(pane);
             screenBoxList.add(pane);
+
+            // add screen to menu
+            screensmenu.getItems().add(new ScreenMenuItem(pane));
         }
     }
 
