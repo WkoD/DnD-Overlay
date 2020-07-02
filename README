@@ -3,3 +3,20 @@
 A server based approach to transmit information for DnD games. The server offers a REST api and any client can send images to be displayed on any connected screen. Everything is still work in progress so expect bugs and broken features. Server and client via internet has not been tested so latency for big images could be really bad, as no form of compression is used.
 
 Server and client have been tested with *Windows 10* only and NOT with *Linux* or *Mac-OS* as of yet.
+
+# Instructions
+1. start server and client
+2. read available screens from server via menu->read screens
+3.1 drag&drop images onto any screen displayed in the client
+3.2 copy&paste images onto any screen displayed in the client
+4. use toggle button to show/hide images or background
+5. use reset button to clear all images or background
+
+# Supported Gestures (Server)
+## Mouse
+* left click: move image
+* left click + ctrl: rotate image
+* scroll wheel: zoom image
+## Touch
+* one finger: move image
+* two fingers: zoom and rotate image
