@@ -3,27 +3,22 @@ package com.github.wkod.dnd.overlay.client.fx;
 import static com.github.wkod.dnd.overlay.api.localization.Messages.*;
 import static com.github.wkod.dnd.overlay.client.fx.localization.Label.*;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import java.io.InputStream;
+import java.net.URL;
 
 import org.slf4j.cal10n.LocLogger;
 
 import com.github.wkod.dnd.overlay.api.OlScreen;
-import com.github.wkod.dnd.overlay.api.exception.OlException;
 import com.github.wkod.dnd.overlay.client.rest.Sender;
 import com.github.wkod.dnd.overlay.util.Utils;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -125,11 +120,11 @@ public class OlScreenBox extends VBox {
                 String filename = urlToName(file.getName());
                 LOGGER.info(CLIENT_DATA_TRANSFER, this.screen.getId(), filename,
                         (background.isSelected() ? background.getText() : ""));
-                try (FileInputStream fis = new FileInputStream(file)) {
+                try (InputStream is = new FileInputStream(file)) {
                     Sender.setImageData(this.screen.getId(), displayname.isSelected() ? filename : null,
-                            imageToByte(new Image(fis)), background.isSelected());
+                            is.readAllBytes(), background.isSelected());
                     background.setSelected(false);
-                } catch (IOException | OlException e1) {
+                } catch (IOException e1) {
                     LOGGER.error(CLIENT_DATA_TRANSFER_ERROR, e1);
                 }
             }
@@ -147,11 +142,13 @@ public class OlScreenBox extends VBox {
                         String filename = urlToName(cb.getUrl());
                         LOGGER.info(CLIENT_DATA_TRANSFER, this.screen.getId(), filename,
                                 (background.isSelected() ? background.getText() : ""));
-                        Sender.setImageData(this.screen.getId(), displayname.isSelected() ? filename : null,
-                                imageToByte(cb.getImage()), background.isSelected());
-                        background.setSelected(false);
+                        try (InputStream is = new URL(cb.getUrl()).openStream()) {
+                            Sender.setImageData(this.screen.getId(), displayname.isSelected() ? filename : null,
+                                    is.readAllBytes(), background.isSelected());
+                            background.setSelected(false);
+                        }
                     }
-                } catch (IOException | OlException e1) {
+                } catch (IOException e1) {
                     LOGGER.error(CLIENT_DATA_TRANSFER_ERROR, e1);
                 }
             }
@@ -197,27 +194,6 @@ public class OlScreenBox extends VBox {
                 setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;" + "-fx-border-width: 2;"
                         + "-fx-border-insets: 5;" + "-fx-border-radius: 5;" + "-fx-border-color: black;");
             }
-        }
-    }
-
-    /**
-     * Transform JavaFX image to byte array.
-     * 
-     * @param image Image
-     * @return byte[]
-     * @throws IOException Exception
-     * @throws OlException Exception
-     */
-    private static byte[] imageToByte(Image image) throws IOException, OlException {
-        BufferedImage bimage = SwingFXUtils.fromFXImage(image, null);
-
-        if (bimage == null) {
-            throw new OlException(CLIENT_DATA_INVALID_IMAGE);
-        }
-
-        try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
-            ImageIO.write(bimage, "gif", stream);
-            return stream.toByteArray();
         }
     }
 
