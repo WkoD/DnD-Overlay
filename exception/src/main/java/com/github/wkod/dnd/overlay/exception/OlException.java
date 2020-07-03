@@ -1,6 +1,6 @@
-package com.github.wkod.dnd.overlay.api.exception;
+package com.github.wkod.dnd.overlay.exception;
 
-import com.github.wkod.dnd.overlay.api.localization.Localizable;
+import com.github.wkod.dnd.overlay.localization.Localizable;
 
 public class OlException extends Exception {
 
@@ -13,9 +13,10 @@ public class OlException extends Exception {
      * Constructor.
      * 
      * @param message Localizable
-     * @param args Object...
+     * @param args    Object...
      */
     public OlException(Localizable message, Object... args) {
-        super(message.localize(args), (args[args.length - 1] instanceof Throwable) ? (Throwable)(args[args.length - 1]) : null);
+        super(message.localize(args),
+                (args[args.length - 1] instanceof Throwable) ? (Throwable) (args[args.length - 1]) : null);
     }
 }

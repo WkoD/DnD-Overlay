@@ -15,6 +15,9 @@
     <modules>
         <module>api</module>
         <module>client</module>
+        <module>configuration</module>
+        <module>exception</module>
+        <module>localization</module>
         <module>server</module>
         <module>util</module>
     </modules>
@@ -23,6 +26,21 @@
             <dependency>
                 <groupId>com.github.wkod.dnd.overlay</groupId>
                 <artifactId>api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.wkod.dnd.overlay</groupId>
+                <artifactId>configuration</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.wkod.dnd.overlay</groupId>
+                <artifactId>exception</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.wkod.dnd.overlay</groupId>
+                <artifactId>localization</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

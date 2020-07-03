@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.wkod.dnd.overlay.api.OlData;
 import com.github.wkod.dnd.overlay.api.OlScreen;
-import com.github.wkod.dnd.overlay.api.exception.OlException;
+import com.github.wkod.dnd.overlay.exception.OlException;
 
 import lombok.RequiredArgsConstructor;
 

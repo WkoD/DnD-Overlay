@@ -7,7 +7,7 @@ import javax.annotation.PreDestroy;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.github.wkod.dnd.overlay.server.config.Configuration;
+import com.github.wkod.dnd.overlay.configuration.ServerConfiguration;
 import com.github.wkod.dnd.overlay.server.fx.ServerFx;
 import com.github.wkod.dnd.overlay.util.Utils;
 
@@ -21,11 +21,12 @@ public class Server {
 
         File configuration = args.length > 0 ? new File(args[0]) : null;
 
-        Configuration.load(configuration, Server.class.getClassLoader().getResourceAsStream("configuration.properties"),
-                Configuration.class);
+        ServerConfiguration.load(configuration,
+                Server.class.getClassLoader().getResourceAsStream("configuration.properties"),
+                ServerConfiguration.class);
 
         // set log level
-        Utils.setRootLogger(Configuration.LOGGER_LOCALE.get(), Configuration.LOGGER_LEVEL.get());
+        Utils.setRootLogger(ServerConfiguration.LOGGER_LOCALE.get(), ServerConfiguration.LOGGER_LEVEL.get());
 
         Application.launch(ServerFx.class, args);
     }

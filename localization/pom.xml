@@ -7,16 +7,12 @@
         <version>0.2.0</version>
     </parent>
     <groupId>com.github.wkod.dnd.overlay</groupId>
-    <artifactId>api</artifactId>
-    <name>DnD-Overlay-Api</name>
+    <artifactId>localization</artifactId>
+    <name>Dnd-Overlay-Localization</name>
     <dependencies>
         <dependency>
-            <groupId>com.github.wkod.dnd.overlay</groupId>
-            <artifactId>configuration</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
+            <groupId>ch.qos.cal10n</groupId>
+            <artifactId>cal10n-api</artifactId>
         </dependency>
     </dependencies>
 </project>

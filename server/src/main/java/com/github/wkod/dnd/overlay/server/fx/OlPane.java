@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.github.wkod.dnd.overlay.server.config.Configuration;
+import com.github.wkod.dnd.overlay.configuration.ServerConfiguration;
 
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -31,7 +31,7 @@ public class OlPane extends Pane {
         setLayoutY(y);
         setWidth(width);
         setHeight(height);
-        
+
         posx = 0;
         posy = 0;
 
@@ -49,16 +49,16 @@ public class OlPane extends Pane {
             // set position to next column
             posx = 0;
             posy += stack.getBoundsInParent().getHeight();
-            
+
             // check height boundaries
             if (posy > 1 && (posy + stack.getBoundsInParent().getHeight()) > getHeight()) {
                 posy = 0;
             }
         }
-        
+
         stack.setLayoutX(posx);
         stack.setLayoutY(posy);
-        
+
         posx += stack.getBoundsInParent().getWidth();
 
         // add stack to pane
@@ -76,7 +76,7 @@ public class OlPane extends Pane {
         for (int i = 0; i < slotlist.size(); ++i) {
             OlImageStack ol = slotlist.get(i);
 
-            ol.setLayoutX(getWidth() - Configuration.IMAGE_SIZE_MIN_VISIBLE.get());
+            ol.setLayoutX(getWidth() - ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get());
             ol.setLayoutY(slotmin + (i * slotsize));
             ol.toFront();
         }

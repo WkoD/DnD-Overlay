@@ -2,10 +2,9 @@ package com.github.wkod.dnd.overlay.server.fx;
 
 import java.util.Objects;
 
-import com.github.wkod.dnd.overlay.server.config.Configuration;
+import com.github.wkod.dnd.overlay.configuration.ServerConfiguration;
 
 import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -55,7 +54,7 @@ public class OlImageStack extends StackPane {
         this.imagepane = imagepane;
         this.name = name;
 
-        if (!Configuration.IMAGE_TRANSPARENCY.get()) {
+        if (!ServerConfiguration.IMAGE_TRANSPARENCY.get()) {
             setStyle("-fx-background-color: white; -fx-background-insets: 1 1 1 1;");
         }
 
@@ -70,12 +69,12 @@ public class OlImageStack extends StackPane {
         // add name label
         if (name != null) {
             lblname = new Text(name);
-            lblname.setFont(new Font(Configuration.IMAGE_TEXT_SIZE.get()));
+            lblname.setFont(new Font(ServerConfiguration.IMAGE_TEXT_SIZE.get()));
             lblname.setStyle("-fx-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
             lblname.maxWidth(Double.MAX_VALUE);
             lblname.maxHeight(Double.MAX_VALUE);
 
-            StackPane.setAlignment(lblname, Pos.valueOf(Configuration.IMAGE_TEXT_POSITION.get()));
+            StackPane.setAlignment(lblname, ServerConfiguration.IMAGE_TEXT_POSITION.get());
             getChildren().add(lblname);
         } else {
             lblname = null;
@@ -195,19 +194,21 @@ public class OlImageStack extends StackPane {
      */
     private void checkPosition() {
         // keep part of picture on screen
-        if (getBoundsInParent().getMinX() + Configuration.IMAGE_SIZE_MIN_VISIBLE.get() > this.imagepane.getWidth()) {
-            setLayoutX(this.imagepane.getWidth() - Configuration.IMAGE_SIZE_MIN_VISIBLE.get()
+        if (getBoundsInParent().getMinX() + ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get() > this.imagepane
+                .getWidth()) {
+            setLayoutX(this.imagepane.getWidth() - ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get()
                     - (getBoundsInParent().getMinX() - getLayoutX()));
-        } else if (getBoundsInParent().getMaxX() < Configuration.IMAGE_SIZE_MIN_VISIBLE.get()) {
-            setLayoutX(Configuration.IMAGE_SIZE_MIN_VISIBLE.get() - getBoundsInParent().getWidth()
+        } else if (getBoundsInParent().getMaxX() < ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get()) {
+            setLayoutX(ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get() - getBoundsInParent().getWidth()
                     - (getBoundsInParent().getMinX() - getLayoutX()));
         }
 
-        if (getBoundsInParent().getMinY() + Configuration.IMAGE_SIZE_MIN_VISIBLE.get() > this.imagepane.getHeight()) {
-            setLayoutY(this.imagepane.getHeight() - Configuration.IMAGE_SIZE_MIN_VISIBLE.get()
+        if (getBoundsInParent().getMinY() + ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get() > this.imagepane
+                .getHeight()) {
+            setLayoutY(this.imagepane.getHeight() - ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get()
                     - (getBoundsInParent().getMinY() - getLayoutY()));
-        } else if (getBoundsInParent().getMaxY() < Configuration.IMAGE_SIZE_MIN_VISIBLE.get()) {
-            setLayoutY(Configuration.IMAGE_SIZE_MIN_VISIBLE.get() - getBoundsInParent().getHeight()
+        } else if (getBoundsInParent().getMaxY() < ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get()) {
+            setLayoutY(ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get() - getBoundsInParent().getHeight()
                     - (getBoundsInParent().getMinY() - getLayoutY()));
         }
     }
@@ -239,7 +240,7 @@ public class OlImageStack extends StackPane {
      * Scale image according to default value.
      */
     private void defaultScale() {
-        double defaultHeight = (imagepane.getHeight() * Configuration.IMAGE_SIZE_SCALE_ONLOAD.get());
+        double defaultHeight = (imagepane.getHeight() * ServerConfiguration.IMAGE_SIZE_SCALE_ONLOAD.get());
         double relheightpercent = imageview.getImage().getHeight() / defaultHeight;
         double scalefactor = 1 / relheightpercent;
 

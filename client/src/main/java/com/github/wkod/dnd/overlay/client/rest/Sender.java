@@ -1,6 +1,6 @@
 package com.github.wkod.dnd.overlay.client.rest;
 
-import static com.github.wkod.dnd.overlay.api.localization.Messages.*;
+import static com.github.wkod.dnd.overlay.localization.Messages.*;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -19,11 +19,11 @@ import org.slf4j.cal10n.LocLogger;
 import com.github.wkod.dnd.overlay.api.OlData;
 import com.github.wkod.dnd.overlay.api.OlDataType;
 import com.github.wkod.dnd.overlay.api.OlScreen;
-import com.github.wkod.dnd.overlay.client.config.Configuration;
+import com.github.wkod.dnd.overlay.configuration.ClientConfiguration;
 import com.github.wkod.dnd.overlay.util.Utils;
 
 public class Sender {
-    
+
     private static final LocLogger LOGGER = Utils.getLogger(Sender.class);
 
     public static List<OlScreen> getScreens() {
@@ -37,7 +37,7 @@ public class Sender {
         } catch (Exception e) {
             LOGGER.error(CLIENT_DATA_TRANSFER_ERROR, e);
         }
-        
+
         return new ArrayList<>();
     }
 
@@ -86,7 +86,7 @@ public class Sender {
     }
 
     private static String getTarget() {
-        return "http://" + Configuration.SERVER_HOST.get() + ":" + Configuration.SERVER_PORT.get()
-                + Configuration.SERVER_SERVLET_CONTEXT_PATH.get();
+        return "http://" + ClientConfiguration.SERVER_HOST.get() + ":" + ClientConfiguration.SERVER_PORT.get()
+                + ClientConfiguration.SERVER_SERVLET_CONTEXT_PATH.get();
     }
 }

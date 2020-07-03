@@ -1,4 +1,4 @@
-package com.github.wkod.dnd.overlay.api.localization;
+package com.github.wkod.dnd.overlay.localization;
 
 import java.util.Locale;
 

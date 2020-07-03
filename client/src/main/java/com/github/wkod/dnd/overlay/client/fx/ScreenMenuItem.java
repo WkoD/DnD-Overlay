@@ -30,7 +30,7 @@ public class ScreenMenuItem extends CheckMenuItem {
             e.consume();
         });
     }
-    
+
     /**
      * Set screen to visible.
      */

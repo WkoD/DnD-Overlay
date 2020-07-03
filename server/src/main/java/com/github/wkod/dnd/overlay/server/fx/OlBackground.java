@@ -1,9 +1,8 @@
 package com.github.wkod.dnd.overlay.server.fx;
 
-import com.github.wkod.dnd.overlay.server.config.Configuration;
+import com.github.wkod.dnd.overlay.configuration.ServerConfiguration;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -41,12 +40,12 @@ public class OlBackground extends StackPane {
 
         // add name label
         lblname = new Text("");
-        lblname.setFont(new Font(Configuration.BACKGROUND_TEXT_SIZE.get()));
+        lblname.setFont(new Font(ServerConfiguration.BACKGROUND_TEXT_SIZE.get()));
         lblname.setStyle("-fx-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
         lblname.maxWidth(Double.MAX_VALUE);
         lblname.maxHeight(Double.MAX_VALUE);
 
-        StackPane.setAlignment(lblname, Pos.valueOf(Configuration.BACKGROUND_TEXT_POSITION.get()));
+        StackPane.setAlignment(lblname, ServerConfiguration.BACKGROUND_TEXT_POSITION.get());
         getChildren().add(lblname);
 
         setOpacity(1);
@@ -68,7 +67,7 @@ public class OlBackground extends StackPane {
         }
 
         // set image
-        if (Configuration.BACKGROUND_TRANSPARENCY.get()) {
+        if (ServerConfiguration.BACKGROUND_TRANSPARENCY.get()) {
             setBackground(
                     new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
                             BackgroundPosition.DEFAULT, new BackgroundSize(1.0, 1.0, true, true, false, true))));

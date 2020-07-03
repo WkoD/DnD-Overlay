@@ -1,4 +1,4 @@
-package com.github.wkod.dnd.overlay.util.config;
+package com.github.wkod.dnd.overlay.configuration;
 
 public interface ConfigurationValidator<T> {
 

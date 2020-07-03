@@ -1,6 +1,6 @@
 package com.github.wkod.dnd.overlay.server.fx;
 
-import static com.github.wkod.dnd.overlay.api.localization.Messages.*;
+import static com.github.wkod.dnd.overlay.localization.Messages.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -15,8 +15,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import com.github.wkod.dnd.overlay.api.OlScreen;
+import com.github.wkod.dnd.overlay.configuration.ServerConfiguration;
 import com.github.wkod.dnd.overlay.server.Server;
-import com.github.wkod.dnd.overlay.server.config.Configuration;
 import com.github.wkod.dnd.overlay.util.Utils;
 import com.sun.glass.ui.Screen;
 
@@ -48,7 +48,7 @@ public class ServerFx extends Application {
         String[] args = getParameters().getRaw().toArray(new String[0]);
 
         this.applicationContext = new SpringApplicationBuilder().sources(Server.class)
-                .properties(Configuration.getCopy()).run(args);
+                .properties(ServerConfiguration.getPropertiesForSpringBoot(ServerConfiguration.class)).run(args);
     }
 
     /**
@@ -79,13 +79,13 @@ public class ServerFx extends Application {
         primaryStage.setHeight(0);
         primaryStage.setWidth(0);
         primaryStage.show();
-        
+
         for (Screen screen : Screen.getScreens()) {
             OlStage stage = new OlStage(screen.getX(), screen.getY(), screen.getWidth(), screen.getHeight());
-            
+
             // set stage as sub stage of primary to get rid of taskbar entries
             stage.initOwner(primaryStage);
-            
+
             stage.show();
             screenMap.put(index++, stage);
         }
