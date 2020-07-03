@@ -19,7 +19,7 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
 
-        File configuration = args.length > 0 ? new File(args[0]) : null;
+        File configuration = args.length > 0 ? new File(args[0]) : new File("configuration.properties");
 
         ServerConfiguration.load(configuration,
                 Server.class.getClassLoader().getResourceAsStream("configuration.properties"),

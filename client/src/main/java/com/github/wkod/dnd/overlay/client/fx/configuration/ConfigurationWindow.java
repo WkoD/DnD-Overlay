@@ -39,15 +39,18 @@ public class ConfigurationWindow extends Stage {
         for (ConfigurationParameter<?> element : list) {
             Label name = new Label(element.name());
             root.add(name, 0, row);
+            GridPane.setColumnSpan(name, 2);
 
             if (element.isTypeEnum()) {
                 ConfigurationComboBox<?> value = new ConfigurationComboBox<>(element);
                 valuelist.add(value);
-                root.add(value, 1, row);
+                root.add(value, 2, row);
+                GridPane.setColumnSpan(value, 2);
             } else {
                 ConfigurationTextField<?> value = new ConfigurationTextField<>(element);
                 valuelist.add(value);
-                root.add(value, 1, row);
+                root.add(value, 2, row);
+                GridPane.setColumnSpan(value, 2);
             }
 
             ++row;
@@ -55,33 +58,50 @@ public class ConfigurationWindow extends Stage {
 
         Button confirm = new Button(CONFIRM.localize());
         Button cancel = new Button(CANCEL.localize());
+        Button save = new Button(SAVE.localize());
 
         root.add(confirm, 0, row);
         root.add(cancel, 1, row);
+        root.add(save, 4, row);
 
         // set scene
         Scene scene = new Scene(root);
 
-        setTitle(CLIENT_CONFIGURATION.localize());
+        setTitle(CLIENT_CONFIGURATION_CLIENT.localize() + " " + CLIENT_CONFIGURATION.localize());
         setScene(scene);
 
         // set events
         confirm.setOnAction(e -> {
-            try {
-                for (ConfigurationField value : valuelist) {
-                    value.updateConfiguration();
-                }
-
-                close();
-            } catch (OlRuntimeException e1) {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setContentText(e1.getMessage());
-                LOGGER.error(e1.getMessage(), e1);
-            }
+            update();
+            close();
+            e.consume();
         });
 
         cancel.setOnAction(e -> {
             close();
+            e.consume();
         });
+        
+        save.setOnAction(e -> {
+            update();
+            Configuration.save(clazz);
+            e.consume();
+        });
+    }
+    
+    /**
+     * Update configuration.
+     */
+    private void update() {
+        try {
+            // update values
+            for (ConfigurationField value : valuelist) {
+                value.updateConfiguration();
+            }
+        } catch (OlRuntimeException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setContentText(e.getMessage());
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 }
