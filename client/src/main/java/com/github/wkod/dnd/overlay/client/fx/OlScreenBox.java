@@ -213,8 +213,9 @@ public class OlScreenBox extends VBox {
         String filename = url.getFile();
         String filetype = URLConnection.guessContentTypeFromName(filename);
 
-        if (!filetype.startsWith("image/")) {
+        if (filetype == null || !filetype.startsWith("image/")) {
             LOGGER.error(CLIENT_DATA_TRANSFER_INVALID_TYPE, filetype, filename);
+            return;
         }
 
         filename = urlToName(URLDecoder.decode(filename, StandardCharsets.UTF_8));
