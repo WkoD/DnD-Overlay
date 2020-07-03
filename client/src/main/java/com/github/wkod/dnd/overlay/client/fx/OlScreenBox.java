@@ -4,10 +4,12 @@ import static com.github.wkod.dnd.overlay.api.localization.Messages.*;
 import static com.github.wkod.dnd.overlay.client.fx.localization.Label.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 import org.slf4j.cal10n.LocLogger;
 
@@ -41,6 +43,9 @@ public class OlScreenBox extends VBox {
      */
     private final OlScreen screen;
 
+    private final CheckBox background;
+    private final CheckBox displayname;
+
     /**
      * Constructor.
      * 
@@ -70,13 +75,13 @@ public class OlScreenBox extends VBox {
         size.maxHeight(Double.MAX_VALUE);
 
         // set option boxes
-        CheckBox background = new CheckBox();
+        background = new CheckBox();
         background.setAlignment(Pos.BOTTOM_LEFT);
         background.setText(CLIENT_CHECKBOX_BACKGROUND.localize());
         background.setIndeterminate(false);
         background.setSelected(false);
 
-        CheckBox displayname = new CheckBox();
+        displayname = new CheckBox();
         displayname.setAlignment(Pos.BOTTOM_LEFT);
         displayname.setText(CLIENT_CHECKBOX_DISPLAY_NAME.localize());
         displayname.setIndeterminate(false);
@@ -121,43 +126,15 @@ public class OlScreenBox extends VBox {
         // drag and drop
         setOnDragDropped(e -> {
             Dragboard db = e.getDragboard();
+            sendDataFromClipboard(db);
             e.setDropCompleted(db.hasFiles());
-
-            for (final File file : db.getFiles()) {
-                String filename = urlToName(file.getName());
-                LOGGER.info(CLIENT_DATA_TRANSFER, this.screen.getId(), filename,
-                        (background.isSelected() ? background.getText() : ""));
-                try (InputStream is = new FileInputStream(file)) {
-                    Sender.setImageData(this.screen.getId(), displayname.isSelected() ? filename : null,
-                            is.readAllBytes(), background.isSelected());
-                    background.setSelected(false);
-                } catch (IOException e1) {
-                    LOGGER.error(CLIENT_DATA_TRANSFER_ERROR, e1);
-                }
-            }
-
             e.consume();
         });
 
         // ctrl + v
         setOnKeyPressed(e -> {
             if (e.isControlDown() && KeyCode.V.equals(e.getCode())) {
-                Clipboard cb = Clipboard.getSystemClipboard();
-
-                try {
-                    if (cb.hasContent(DataFormat.IMAGE)) {
-                        String filename = urlToName(cb.getUrl());
-                        LOGGER.info(CLIENT_DATA_TRANSFER, this.screen.getId(), filename,
-                                (background.isSelected() ? background.getText() : ""));
-                        try (InputStream is = new URL(cb.getUrl()).openStream()) {
-                            Sender.setImageData(this.screen.getId(), displayname.isSelected() ? filename : null,
-                                    is.readAllBytes(), background.isSelected());
-                            background.setSelected(false);
-                        }
-                    }
-                } catch (IOException e1) {
-                    LOGGER.error(CLIENT_DATA_TRANSFER_ERROR, e1);
-                }
+                sendDataFromClipboard(Clipboard.getSystemClipboard());
             }
 
             e.consume();
@@ -201,6 +178,54 @@ public class OlScreenBox extends VBox {
                 setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;" + "-fx-border-width: 2;"
                         + "-fx-border-insets: 2;" + "-fx-border-radius: 4;" + "-fx-border-color: black;");
             }
+        }
+    }
+
+    /**
+     * Send any supported data from clipboard or dragboard to server.
+     * 
+     * @param clipboard Clipboard
+     */
+    private void sendDataFromClipboard(Clipboard clipboard) {
+        try {
+            if (clipboard.hasContent(DataFormat.IMAGE)) {
+                sendImage(new URL(clipboard.getUrl()));
+            } else if (clipboard.hasContent(DataFormat.FILES)) {
+                for (final File file : clipboard.getFiles()) {
+                    sendImage(file.toURI().toURL());
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.error(CLIENT_DATA_TRANSFER_ERROR, e);
+        }
+    }
+
+    /**
+     * Send an image to the server.
+     * 
+     * @param url URL
+     */
+    private void sendImage(URL url) {
+        if (url == null) {
+            return;
+        }
+
+        String filename = url.getFile();
+        String filetype = URLConnection.guessContentTypeFromName(filename);
+
+        if (!filetype.startsWith("image/")) {
+            LOGGER.error(CLIENT_DATA_TRANSFER_INVALID_TYPE, filetype, filename);
+        }
+
+        filename = urlToName(URLDecoder.decode(filename, StandardCharsets.UTF_8));
+        LOGGER.info(CLIENT_DATA_TRANSFER, this.screen.getId(), filename, filetype);
+
+        try (InputStream is = url.openStream()) {
+            Sender.setImageData(this.screen.getId(), displayname.isSelected() ? filename : null, is.readAllBytes(),
+                    background.isSelected());
+            background.setSelected(false);
+        } catch (IOException e1) {
+            LOGGER.error(CLIENT_DATA_TRANSFER_ERROR, e1);
         }
     }
 
