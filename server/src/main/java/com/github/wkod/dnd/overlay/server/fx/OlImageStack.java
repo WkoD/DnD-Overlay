@@ -108,7 +108,10 @@ public class OlImageStack extends StackPane {
         });
 
         setOnScroll(e -> {
-            setScale(e.getDeltaY() > 0 ? (getScale() / 1.1) : (getScale() * 1.1));
+            // only use with non touch
+            if (e.getTouchCount() == 0 && !e.isInertia()) {
+                setScale(e.getDeltaY() > 0 ? (getScale() / 1.1) : (getScale() * 1.1), true);
+            }
             e.consume();
         });
 
@@ -171,7 +174,7 @@ public class OlImageStack extends StackPane {
         });
 
         setOnZoom(e -> {
-            setScale(getScale() * e.getZoomFactor());
+            setScale(getScale() * e.getZoomFactor(), false);
             e.consume();
         });
 
@@ -218,12 +221,14 @@ public class OlImageStack extends StackPane {
      * 
      * @param scale double
      */
-    private void setScale(final double scale) {
+    private void setScale(final double scale, boolean translate) {
         double heightold = (imageview.getBoundsInParent().getMaxY() - imageview.getBoundsInParent().getMinY());
         double heightnew = heightold * scale;
 
-        setLayoutX(getLayoutX() + (heightold - heightnew) * 0.5);
-        setLayoutY(getLayoutY() + (heightold - heightnew) * 0.5);
+        if (translate) {
+            setLayoutX(getLayoutX() + (heightold - heightnew) * 0.5);
+            setLayoutY(getLayoutY() + (heightold - heightnew) * 0.5);
+        }
         imageview.setFitHeight(heightnew);
     }
 
@@ -244,6 +249,6 @@ public class OlImageStack extends StackPane {
         double relheightpercent = imageview.getImage().getHeight() / defaultHeight;
         double scalefactor = 1 / relheightpercent;
 
-        setScale(scalefactor);
+        setScale(scalefactor, true);
     }
 }
