@@ -63,9 +63,6 @@ public class OlImageStack extends StackPane {
         imageview.setPreserveRatio(true);
         getChildren().add(imageview);
 
-        // set sizes to 1/2 of screen (height)
-        defaultScale();
-
         // add name label
         if (name != null) {
             lblname = new Text(name);
@@ -79,6 +76,9 @@ public class OlImageStack extends StackPane {
         } else {
             lblname = null;
         }
+        
+        // set sizes of image to 1/2 of screen (height)
+        defaultScale();
 
         // mouse events
         setOnMousePressed(e -> {
@@ -189,6 +189,14 @@ public class OlImageStack extends StackPane {
             this.imagepane.toSlot(this);
             e.consume();
         });
+    }
+    
+    public double getImageWidth() {
+        return imageview.getBoundsInParent().getWidth();
+    }
+    
+    public double getImageHeight() {
+        return imageview.getBoundsInParent().getHeight();
     }
 
     /**

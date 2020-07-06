@@ -45,13 +45,13 @@ public class OlPane extends Pane {
         OlImageStack stack = new OlImageStack(this, name, image);
 
         // check width boundaries
-        if (posx > 1 && (posx + stack.getBoundsInParent().getWidth()) > getWidth()) {
+        if (posx > 1 && (posx + stack.getImageWidth()) > getWidth()) {
             // set position to next column
             posx = 0;
-            posy += stack.getBoundsInParent().getHeight();
+            posy += stack.getImageHeight();
 
             // check height boundaries
-            if (posy > 1 && (posy + stack.getBoundsInParent().getHeight()) > getHeight()) {
+            if (posy > 1 && (posy + stack.getImageHeight()) > getHeight()) {
                 posy = 0;
             }
         }
@@ -59,7 +59,7 @@ public class OlPane extends Pane {
         stack.setLayoutX(posx);
         stack.setLayoutY(posy);
 
-        posx += stack.getBoundsInParent().getWidth();
+        posx += stack.getImageWidth();
 
         // add stack to pane
         getChildren().add(stack);
