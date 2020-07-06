@@ -5,12 +5,13 @@ A server based approach to transmit information for DnD games. The server offers
 Server and client have been tested with *Windows 10* only and NOT with *Linux* or *Mac-OS* as of yet.
 
 # Instructions
-1. start server and client
+1 start server and client ("java -jar xxx.jar" or "java -jar xxx.jar configuration.properties")
 2. read available screens from server via menu->read screens
 3.1 drag&drop images onto any screen displayed in the client
 3.2 copy&paste images onto any screen displayed in the client
-4. use toggle button to show/hide images or background
-5. use reset button to clear all images or background
+4. use checkbox to display image name or set as background
+5. use toggle button to show/hide images or background
+6. use reset button to clear all images or background
 
 # Supported Gestures (Server)
 ## Mouse
