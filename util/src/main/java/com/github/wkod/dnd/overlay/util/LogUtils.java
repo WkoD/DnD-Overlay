@@ -8,14 +8,34 @@ import org.slf4j.cal10n.LocLoggerFactory;
 
 import ch.qos.cal10n.IMessageConveyor;
 import ch.qos.cal10n.MessageConveyor;
-import ch.qos.logback.classic.Level;
+import lombok.Getter;
 
-public final class Utils {
+public final class LogUtils {
+    
+    /**
+     * Supported log level by Logback.
+     */
+    public enum Level {
+        ALL(ch.qos.logback.classic.Level.ALL),
+        DEBUG(ch.qos.logback.classic.Level.DEBUG),
+        ERROR(ch.qos.logback.classic.Level.ERROR),
+        INFO(ch.qos.logback.classic.Level.INFO),
+        OFF(ch.qos.logback.classic.Level.OFF),
+        TRACE(ch.qos.logback.classic.Level.TRACE),
+        WARN(ch.qos.logback.classic.Level.WARN);
+        
+        @Getter
+        private final ch.qos.logback.classic.Level level;
+        
+        private Level(ch.qos.logback.classic.Level level) {
+            this.level = level;
+        }
+    }
 
     /**
      * Private constructor.
      */
-    private Utils() {
+    private LogUtils() {
     }
     
     /**
@@ -35,10 +55,10 @@ public final class Utils {
      * 
      * @param level String
      */
-    public static void setRootLogger(Locale locale, String level) {
+    public static void setRootLogger(Locale locale, Level level) {
         Locale.setDefault(locale);
         ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory
                 .getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
-        logger.setLevel(Level.toLevel(level, logger.getLevel()));
+        logger.setLevel(level.level);
     }
 }

@@ -20,11 +20,11 @@ import com.github.wkod.dnd.overlay.api.OlData;
 import com.github.wkod.dnd.overlay.api.OlDataType;
 import com.github.wkod.dnd.overlay.api.OlScreen;
 import com.github.wkod.dnd.overlay.configuration.ClientConfiguration;
-import com.github.wkod.dnd.overlay.util.Utils;
+import com.github.wkod.dnd.overlay.util.LogUtils;
 
 public class Sender {
 
-    private static final LocLogger LOGGER = Utils.getLogger(Sender.class);
+    private static final LocLogger LOGGER = LogUtils.getLogger(Sender.class);
 
     public static List<OlScreen> getScreens() {
         try {

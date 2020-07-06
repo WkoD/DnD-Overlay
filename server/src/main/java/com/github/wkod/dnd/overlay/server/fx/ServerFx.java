@@ -17,7 +17,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import com.github.wkod.dnd.overlay.api.OlScreen;
 import com.github.wkod.dnd.overlay.configuration.ServerConfiguration;
 import com.github.wkod.dnd.overlay.server.Server;
-import com.github.wkod.dnd.overlay.util.Utils;
+import com.github.wkod.dnd.overlay.util.LogUtils;
 import com.sun.glass.ui.Screen;
 
 import javafx.application.Application;
@@ -28,7 +28,7 @@ import javafx.stage.StageStyle;
 
 public class ServerFx extends Application {
 
-    private static final LocLogger LOGGER = Utils.getLogger(ServerFx.class);
+    private static final LocLogger LOGGER = LogUtils.getLogger(ServerFx.class);
 
     /**
      * Spring context.

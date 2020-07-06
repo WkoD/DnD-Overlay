@@ -4,7 +4,7 @@ import java.io.File;
 
 import com.github.wkod.dnd.overlay.client.fx.ClientFx;
 import com.github.wkod.dnd.overlay.configuration.ClientConfiguration;
-import com.github.wkod.dnd.overlay.util.Utils;
+import com.github.wkod.dnd.overlay.util.LogUtils;
 
 public class Client {
 
@@ -17,7 +17,7 @@ public class Client {
                 ClientConfiguration.class);
 
         // set log level
-        Utils.setRootLogger(ClientConfiguration.LOGGER_LOCALE.get(), ClientConfiguration.LOGGER_LEVEL.get());
+        LogUtils.setRootLogger(ClientConfiguration.LOGGER_LOCALE.get(), ClientConfiguration.LOGGER_LEVEL.get());
 
         ClientFx.runthis(args);
     }

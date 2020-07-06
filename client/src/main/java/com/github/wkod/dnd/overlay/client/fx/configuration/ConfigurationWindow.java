@@ -10,7 +10,7 @@ import org.slf4j.cal10n.LocLogger;
 import com.github.wkod.dnd.overlay.configuration.Configuration;
 import com.github.wkod.dnd.overlay.configuration.ConfigurationParameter;
 import com.github.wkod.dnd.overlay.exception.OlRuntimeException;
-import com.github.wkod.dnd.overlay.util.Utils;
+import com.github.wkod.dnd.overlay.util.LogUtils;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 
 public class ConfigurationWindow extends Stage {
 
-    private static final LocLogger LOGGER = Utils.getLogger(ConfigurationWindow.class);
+    private static final LocLogger LOGGER = LogUtils.getLogger(ConfigurationWindow.class);
 
     private final List<ConfigurationField> valuelist = new ArrayList<>();
 

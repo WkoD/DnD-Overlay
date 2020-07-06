@@ -2,9 +2,11 @@ package com.github.wkod.dnd.overlay.configuration;
 
 import java.util.Locale;
 
+import com.github.wkod.dnd.overlay.util.LogUtils.Level;
+
 public final class ClientConfiguration extends ServerConfiguration {
 
-    public static final ConfigurationParameter<String> LOGGER_LEVEL = ServerConfiguration.LOGGER_LEVEL;
+    public static final ConfigurationParameter<Level> LOGGER_LEVEL = ServerConfiguration.LOGGER_LEVEL;
     public static final ConfigurationParameter<Locale> LOGGER_LOCALE = ServerConfiguration.LOGGER_LOCALE;
 
     public static final ConfigurationParameter<String> SERVER_HOST = new ConfigurationParameter<>("server.host",

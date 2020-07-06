@@ -15,7 +15,7 @@ import org.slf4j.cal10n.LocLogger;
 
 import com.github.wkod.dnd.overlay.api.OlScreen;
 import com.github.wkod.dnd.overlay.client.rest.Sender;
-import com.github.wkod.dnd.overlay.util.Utils;
+import com.github.wkod.dnd.overlay.util.LogUtils;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -36,7 +36,7 @@ import javafx.scene.text.Font;
 
 public class OlScreenBox extends VBox {
 
-    private static final LocLogger LOGGER = Utils.getLogger(OlScreenBox.class);
+    private static final LocLogger LOGGER = LogUtils.getLogger(OlScreenBox.class);
 
     /**
      * Associated screen.

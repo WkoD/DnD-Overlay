@@ -3,11 +3,12 @@ package com.github.wkod.dnd.overlay.configuration;
 import java.util.Locale;
 
 import com.github.wkod.dnd.overlay.localization.LocalizationUtils;
+import com.github.wkod.dnd.overlay.util.LogUtils.Level;
 
 public class ServerConfiguration extends Configuration {
 
-    public static final ConfigurationParameter<String> LOGGER_LEVEL = new ConfigurationParameter<>("logger.level",
-            String.class);
+    public static final ConfigurationParameter<Level> LOGGER_LEVEL = new ConfigurationParameter<>("logger.level",
+            Level.class);
     public static final ConfigurationParameter<Locale> LOGGER_LOCALE = new ConfigurationParameter<>("logger.locale",
             Locale.class, (Locale value) -> {
                 return LocalizationUtils.isSupported(value);

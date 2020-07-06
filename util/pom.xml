@@ -11,12 +11,12 @@
     <name>DnD-Overlay-Util</name>
     <dependencies>
         <dependency>
-            <groupId>com.github.wkod.dnd.overlay</groupId>
-            <artifactId>api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.cal10n</groupId>
+            <artifactId>cal10n-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

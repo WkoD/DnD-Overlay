@@ -15,6 +15,10 @@
             <artifactId>configuration</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.github.wkod.dnd.overlay</groupId>
+            <artifactId>util</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
         </dependency>
