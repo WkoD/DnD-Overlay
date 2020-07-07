@@ -56,9 +56,6 @@ public class OlScreenBox extends VBox {
         setSelected(false);
 
         setId(String.valueOf(this.screen.getId())); // set id to screen id
-
-        setMinWidth(150);
-        setMinHeight(100);
         setAlignment(Pos.BASELINE_CENTER);
         setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(4.0), new Insets(2.0))));
 

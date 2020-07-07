@@ -14,7 +14,6 @@ import com.github.wkod.dnd.overlay.configuration.ClientConfiguration;
 import com.github.wkod.dnd.overlay.configuration.ServerConfiguration;
 
 import javafx.application.Platform;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -33,6 +32,8 @@ public class ClientWindow extends Stage {
 
     private final List<OlScreenBox> screenBoxList = new ArrayList<>();
     private final HBox screenBoxPane;
+    
+    private final TextArea console;
 
     public ClientWindow() {
         // root pane
@@ -43,11 +44,11 @@ public class ClientWindow extends Stage {
 
         // set screen pane
         screenBoxPane = new HBox();
-        screenBoxPane.setMinHeight(200d);
         root.setCenter(screenBoxPane);
 
         // set console
-        root.setBottom(createConsole());
+        console = createConsole();
+        root.setBottom(console);
 
         // set scene
         Scene scene = new Scene(root);
@@ -99,11 +100,9 @@ public class ClientWindow extends Stage {
         });
 
         toggleconsole.setOnAction(e -> {
-            Node node = ((BorderPane) (menubar.getParent())).getBottom();
-
-            boolean togglestate = !node.isVisible();
-            node.setManaged(togglestate);
-            node.setVisible(togglestate);
+            boolean togglestate = !console.isVisible();
+            console.setManaged(togglestate);
+            console.setVisible(togglestate);
             e.consume();
         });
 
@@ -144,8 +143,6 @@ public class ClientWindow extends Stage {
         TextArea console = new TextArea();
         console.setEditable(false);
         console.setStyle("-fx-font-family: 'monospaced';");
-        console.setMinHeight(100d);
-        console.setMaxHeight(100d);
 
         StaticOutputStreamAppender.setStaticOutputStream(new TextAreaOutputStream(console));
 
