@@ -24,8 +24,6 @@ public class ClientFx extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         ClientWindow window = new ClientWindow();
-        window.setMinWidth(600d);
-        window.setMinHeight(300d);
         window.show();
     }
 }

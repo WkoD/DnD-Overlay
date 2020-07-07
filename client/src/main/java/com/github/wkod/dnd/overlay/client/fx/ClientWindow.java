@@ -60,6 +60,9 @@ public class ClientWindow extends Stage {
         if (ClientConfiguration.UPDATE_SCREEN_STARTUP.get()) {
             updateScreenListPane();
         }
+        
+        setMinWidth(600d);
+        setMinHeight(400d);
     }
 
     private MenuBar createMenu() {
