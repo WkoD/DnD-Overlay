@@ -16,7 +16,7 @@ import com.github.wkod.dnd.overlay.exception.OlRuntimeException;
 import com.github.wkod.dnd.overlay.localization.Messages;
 
 public abstract class Configuration {
-    
+
     /**
      * Properties file location.
      */
@@ -40,6 +40,8 @@ public abstract class Configuration {
             }
 
             // load from file
+            // NOTE if internal was found, both will be merged
+            // with file entries overriding internal entries
             if (file != null && file.exists()) {
                 try (InputStream is = new FileInputStream(file)) {
                     properties.load(is);
@@ -53,19 +55,36 @@ public abstract class Configuration {
             throw new OlRuntimeException(Messages.CONFIGURATION_ERROR, e);
         }
 
+        load(properties, clazz);
+    }
+
+    /**
+     * Read configuration from properties.
+     * 
+     * @param properties Properties
+     * @param clazz      Class<? extends Configuration>
+     */
+    public static void load(Properties properties, Class<? extends Configuration> clazz) {
         // set and check values
         List<ConfigurationParameter<?>> list = values(clazz);
 
         for (ConfigurationParameter<?> config : list) {
-            config.fromString((String) properties.get(config.name()));
-            config.get();
+            if (properties.containsKey(config.name())) {
+                // set only known config values
+                config.fromString((String) properties.get(config.name()));
+            } else {
+                // validate current value if none is given
+                // NOTE this is done so no configuration value
+                // is missing when configuration is changed
+                config.validate();
+            }
         }
     }
-    
+
     /**
      * Save current configuration.
      * 
-     * @param file File
+     * @param file  File
      * @param clazz Class<? extends Configuration>
      */
     public static void save(Class<? extends Configuration> clazz) {
@@ -73,19 +92,19 @@ public abstract class Configuration {
         if (propertiesfile == null) {
             return;
         }
-        
+
         List<ConfigurationParameter<?>> list = values(clazz);
         Properties properties = new Properties();
 
         for (ConfigurationParameter<?> config : list) {
             properties.setProperty(config.name(), config.toString());
         }
-        
+
         // delete old properties file
         if (propertiesfile.exists()) {
             propertiesfile.delete();
         }
-        
+
         // write configuration
         try (OutputStream os = new FileOutputStream(propertiesfile)) {
             properties.store(os, null);
@@ -133,4 +152,16 @@ public abstract class Configuration {
 
         return list;
     }
+
+    protected static ConfigurationValidator<Integer> INTEGER_POSITIVE = (Integer value) -> {
+        return value > 0;
+    };
+    
+    protected static ConfigurationValidator<Integer> INTEGER_POSITIVE_ZERO = (Integer value) -> {
+        return value >= 0;
+    };
+    
+    protected static ConfigurationValidator<Double> DOUBLE_POSITIVE = (Double value) -> {
+        return value > 0.0;
+    };
 }

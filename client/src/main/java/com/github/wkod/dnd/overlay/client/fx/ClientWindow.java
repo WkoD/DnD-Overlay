@@ -9,8 +9,9 @@ import java.util.List;
 
 import com.github.wkod.dnd.overlay.api.OlScreen;
 import com.github.wkod.dnd.overlay.client.fx.configuration.ConfigurationWindow;
-import com.github.wkod.dnd.overlay.client.rest.Sender;
+import com.github.wkod.dnd.overlay.client.rest.RestClient;
 import com.github.wkod.dnd.overlay.configuration.ClientConfiguration;
+import com.github.wkod.dnd.overlay.configuration.ServerConfiguration;
 
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -73,8 +74,10 @@ public class ClientWindow extends Stage {
 
         Menu configuration = new Menu(CLIENT_CONFIGURATION.localize());
         MenuItem client = new MenuItem(CLIENT_CONFIGURATION_CLIENT.localize());
+        MenuItem server = new MenuItem(CLIENT_CONFIGURATION_SERVER.localize());
 
         configuration.getItems().add(client);
+        configuration.getItems().add(server);
 
         screensmenu = new Menu(CLIENT_SCREENS.localize());
         MenuItem allscreens = new MenuItem(CLIENT_SCREENS_ALL.localize());
@@ -118,6 +121,12 @@ public class ClientWindow extends Stage {
             configwindow.show();
             e.consume();
         });
+        
+        server.setOnAction(e -> {
+            ConfigurationWindow configwindow = new ConfigurationWindow(ServerConfiguration.class);
+            configwindow.show();
+            e.consume();
+        });
 
         allscreens.setOnAction(e -> {
             for (MenuItem item : screensmenu.getItems()) {
@@ -152,7 +161,7 @@ public class ClientWindow extends Stage {
             screensmenu.getItems().remove(screensmenudefaultitems + 1, screensmenu.getItems().size());
         }
 
-        List<OlScreen> list = Sender.getScreens();
+        List<OlScreen> list = RestClient.getScreens();
 
         if (list == null) {
             return;

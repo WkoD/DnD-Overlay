@@ -11,7 +11,7 @@ import ch.qos.cal10n.MessageConveyor;
 import lombok.Getter;
 
 public final class LogUtils {
-    
+
     /**
      * Supported log level by Logback.
      */
@@ -23,10 +23,10 @@ public final class LogUtils {
         OFF(ch.qos.logback.classic.Level.OFF),
         TRACE(ch.qos.logback.classic.Level.TRACE),
         WARN(ch.qos.logback.classic.Level.WARN);
-        
+
         @Getter
         private final ch.qos.logback.classic.Level level;
-        
+
         private Level(ch.qos.logback.classic.Level level) {
             this.level = level;
         }
@@ -37,7 +37,7 @@ public final class LogUtils {
      */
     private LogUtils() {
     }
-    
+
     /**
      * Creates a new localizable logger for the given class.
      * 

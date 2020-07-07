@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.cal10n.LocLogger;
 
 import com.github.wkod.dnd.overlay.api.OlScreen;
-import com.github.wkod.dnd.overlay.client.rest.Sender;
+import com.github.wkod.dnd.overlay.client.rest.RestClient;
 import com.github.wkod.dnd.overlay.util.LogUtils;
 
 import javafx.geometry.Insets;
@@ -100,7 +100,7 @@ public class OlScreenBox extends VBox {
         toggle.setOnAction(e -> {
             LOGGER.info(CLIENT_SCREEN_TOGGLE, this.screen.getId(),
                     (background.isSelected() ? background.getText() : ""));
-            Sender.toggleImageData(this.screen.getId(), background.isSelected());
+            RestClient.toggleImageData(this.screen.getId(), background.isSelected());
             background.setSelected(false);
             e.consume();
         });
@@ -109,7 +109,7 @@ public class OlScreenBox extends VBox {
         reset.setOnAction(e -> {
             LOGGER.debug(CLIENT_SCREEN_RESET, this.screen.getId(),
                     (background.isSelected() ? background.getText() : ""));
-            Sender.clearImageData(this.screen.getId(), background.isSelected());
+            RestClient.clearImageData(this.screen.getId(), background.isSelected());
             background.setSelected(false);
             e.consume();
         });
@@ -222,7 +222,7 @@ public class OlScreenBox extends VBox {
         LOGGER.info(CLIENT_DATA_TRANSFER, this.screen.getId(), filename, filetype);
 
         try (InputStream is = url.openStream()) {
-            Sender.setImageData(this.screen.getId(), displayname.isSelected() ? filename : null, is.readAllBytes(),
+            RestClient.setImageData(this.screen.getId(), displayname.isSelected() ? filename : null, is.readAllBytes(),
                     background.isSelected());
             background.setSelected(false);
         } catch (IOException e1) {

@@ -14,5 +14,9 @@
             <groupId>com.github.wkod.dnd.overlay</groupId>
             <artifactId>exception</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.github.kostaskougios</groupId>
+            <artifactId>cloning</artifactId>
+        </dependency>
     </dependencies>
 </project>

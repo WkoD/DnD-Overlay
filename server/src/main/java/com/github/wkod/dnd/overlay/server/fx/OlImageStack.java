@@ -76,7 +76,7 @@ public class OlImageStack extends StackPane {
         } else {
             lblname = null;
         }
-        
+
         // set sizes of image to 1/2 of screen (height)
         defaultScale();
 
@@ -190,11 +190,11 @@ public class OlImageStack extends StackPane {
             e.consume();
         });
     }
-    
+
     public double getImageWidth() {
         return imageview.getBoundsInParent().getWidth();
     }
-    
+
     public double getImageHeight() {
         return imageview.getBoundsInParent().getHeight();
     }

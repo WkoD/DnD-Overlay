@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import com.github.wkod.dnd.overlay.exception.OlRuntimeException;
 import com.github.wkod.dnd.overlay.localization.Messages;
+import com.rits.cloning.Cloner;
 
 public class ConfigurationParameter<T> {
 
@@ -77,7 +78,16 @@ public class ConfigurationParameter<T> {
     }
 
     /**
-     * Validates String value for this configuration parameter.
+     * Validates value of this configuration parameter.
+     * 
+     * @return boolean
+     */
+    public boolean validate() {
+        return validate(this.value);
+    }
+
+    /**
+     * Validates given value for this configuration parameter.
      * 
      * @param value T
      * @return boolean
@@ -107,6 +117,20 @@ public class ConfigurationParameter<T> {
         }
 
         set(convert(valuestring));
+    }
+
+    /**
+     * Clone this configuration parameter. There is NO validation of values done
+     * here.
+     * 
+     * @return ConfigurationParameter<T>
+     */
+    protected ConfigurationParameter<T> clone() {
+        Cloner cloner = new Cloner();
+        ConfigurationParameter<T> clone = new ConfigurationParameter<>(name, clazz, validator);
+        // only clone value as other values will are final
+        clone.value = cloner.deepClone(this.value);
+        return clone;
     }
 
     /**
@@ -144,7 +168,12 @@ public class ConfigurationParameter<T> {
 
         try {
             if (clazz.isAssignableFrom(Boolean.class)) {
-                value = (T) Boolean.valueOf(valuestring);
+                if (valuestring.equalsIgnoreCase(Boolean.TRUE.toString())
+                        || valuestring.equalsIgnoreCase(Boolean.FALSE.toString())) {
+                    value = (T) Boolean.valueOf(valuestring);
+                } else {
+                    throw new OlRuntimeException(Messages.CONFIGURATION_INVALID_BOOLEAN, valuestring, name);
+                }
             } else if (clazz.isAssignableFrom(Integer.class)) {
                 value = (T) Integer.valueOf(valuestring);
             } else if (clazz.isAssignableFrom(Double.class)) {

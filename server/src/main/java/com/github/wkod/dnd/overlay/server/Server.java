@@ -18,8 +18,8 @@ import javafx.application.Platform;
 public class Server {
 
     public static void main(String[] args) throws IOException {
-
-        File configuration = args.length > 0 ? new File(args[0]) : new File("configuration.properties");
+        
+        File configuration = new File(getConfigurationFileName(args));
 
         ServerConfiguration.load(configuration,
                 Server.class.getClassLoader().getResourceAsStream("configuration.properties"),
@@ -29,6 +29,19 @@ public class Server {
         LogUtils.setRootLogger(ServerConfiguration.LOGGER_LOCALE.get(), ServerConfiguration.LOGGER_LEVEL.get());
 
         Application.launch(ServerFx.class, args);
+    }
+
+    private static String getConfigurationFileName(String[] args) {
+        for (String arg : args) {
+            // ignore spring arguments
+            if (arg.startsWith("-")) {
+                continue;
+            }
+
+            return arg;
+        }
+
+        return "configuration.properties";
     }
 
     @PreDestroy
