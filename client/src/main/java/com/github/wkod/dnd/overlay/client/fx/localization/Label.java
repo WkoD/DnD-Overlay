@@ -12,6 +12,8 @@ public enum Label implements Localizable {
     CONFIRM,
     CANCEL,
     SAVE,
+    
+    IMAGE,
 
     CLIENT_BUTTON_RESET,
     CLIENT_BUTTON_TOGGLE,

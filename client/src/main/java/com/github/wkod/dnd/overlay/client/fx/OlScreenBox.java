@@ -96,7 +96,7 @@ public class OlScreenBox extends VBox {
         // toggle button
         toggle.setOnAction(e -> {
             LOGGER.info(CLIENT_SCREEN_TOGGLE, this.screen.getId(),
-                    (background.isSelected() ? background.getText() : ""));
+                    (background.isSelected() ? background.getText() : IMAGE.localize()));
             RestClient.toggleImageData(this.screen.getId(), background.isSelected());
             background.setSelected(false);
             e.consume();
@@ -105,7 +105,7 @@ public class OlScreenBox extends VBox {
         // reset button
         reset.setOnAction(e -> {
             LOGGER.debug(CLIENT_SCREEN_RESET, this.screen.getId(),
-                    (background.isSelected() ? background.getText() : ""));
+                    (background.isSelected() ? background.getText() : IMAGE.localize()));
             RestClient.clearImageData(this.screen.getId(), background.isSelected());
             background.setSelected(false);
             e.consume();
