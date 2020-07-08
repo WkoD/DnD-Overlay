@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class OlStage extends Stage {
+    
+    private final int screenid;
 
     private final OlPane pane;
 
@@ -16,12 +18,15 @@ public class OlStage extends Stage {
     /**
      * Constructor.
      * 
-     * @param x      int
-     * @param y      int
-     * @param width  int
-     * @param height int
+     * @param screenid int
+     * @param x        int
+     * @param y        int
+     * @param width    int
+     * @param height   int
      */
-    public OlStage(int x, int y, int width, int height) {
+    public OlStage(int screenid, int x, int y, int width, int height) {
+        this.screenid = screenid;
+        
         // basic configuration
         setAlwaysOnTop(true);
         initStyle(StageStyle.TRANSPARENT);
@@ -33,11 +38,11 @@ public class OlStage extends Stage {
         StackPane screenPane = new StackPane();
 
         // background pane
-        background = new OlBackground(x, y, width, height);
+        background = new OlBackground(this.screenid, x, y, width, height);
         background.setVisible(false);
 
         // data pane
-        pane = new OlPane(x, y, width, height);
+        pane = new OlPane(this.screenid, x, y, width, height);
 
         screenPane.getChildren().add(background);
         screenPane.getChildren().add(pane);

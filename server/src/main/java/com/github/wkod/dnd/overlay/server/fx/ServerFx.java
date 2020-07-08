@@ -81,13 +81,14 @@ public class ServerFx extends Application {
         primaryStage.show();
 
         for (Screen screen : Screen.getScreens()) {
-            OlStage stage = new OlStage(screen.getX(), screen.getY(), screen.getWidth(), screen.getHeight());
+            OlStage stage = new OlStage(index, screen.getX(), screen.getY(), screen.getWidth(), screen.getHeight());
 
             // set stage as sub stage of primary to get rid of taskbar entries
             stage.initOwner(primaryStage);
 
             stage.show();
-            screenMap.put(index++, stage);
+            screenMap.put(index, stage);
+            ++index;
         }
     }
 

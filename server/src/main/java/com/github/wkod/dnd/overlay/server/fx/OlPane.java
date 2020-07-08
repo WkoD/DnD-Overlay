@@ -8,8 +8,12 @@ import com.github.wkod.dnd.overlay.configuration.ServerConfiguration;
 
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import lombok.Getter;
 
 public class OlPane extends Pane {
+
+    @Getter
+    private final int screenid;
 
     private double posx;
     private double posy;
@@ -21,12 +25,15 @@ public class OlPane extends Pane {
     /**
      * Constructor.
      * 
-     * @param x      int
-     * @param y      int
-     * @param width  int
-     * @param height int
+     * @param screenid int
+     * @param x        int
+     * @param y        int
+     * @param width    int
+     * @param height   int
      */
-    public OlPane(int x, int y, int width, int height) {
+    public OlPane(int screenid, int x, int y, int width, int height) {
+        this.screenid = screenid;
+
         setLayoutX(x);
         setLayoutY(y);
         setWidth(width);
@@ -76,7 +83,7 @@ public class OlPane extends Pane {
         for (int i = 0; i < slotlist.size(); ++i) {
             OlImageStack ol = slotlist.get(i);
 
-            ol.setLayoutX(getWidth() - ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get());
+            ol.setLayoutX(getWidth() - ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get(screenid));
             ol.setLayoutY(slotmin + (i * slotsize));
             ol.toFront();
         }

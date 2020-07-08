@@ -8,13 +8,13 @@ import com.rits.cloning.Cloner;
 
 public class ConfigurationParameter<T> {
 
-    private final String name;
+    protected final String name;
 
     private T value;
 
-    private final Class<T> clazz;
+    protected final Class<T> clazz;
 
-    private final ConfigurationValidator<T> validator;
+    protected final ConfigurationValidator<T> validator;
 
     /**
      * Constructor.
@@ -51,7 +51,7 @@ public class ConfigurationParameter<T> {
      * 
      * @return String
      */
-    public String name() {
+    public final String name() {
         return this.name;
     }
 
@@ -60,7 +60,7 @@ public class ConfigurationParameter<T> {
      * 
      * @return T
      */
-    public T get() {
+    public final T get() {
         return this.value;
     }
 
@@ -69,7 +69,7 @@ public class ConfigurationParameter<T> {
      * 
      * @param value T
      */
-    public void set(T value) {
+    public final void set(T value) {
         if (!validate(value)) {
             throw new OlRuntimeException(Messages.CONFIGURATION_INVALID, String.valueOf(value));
         }
@@ -92,7 +92,7 @@ public class ConfigurationParameter<T> {
      * @param value T
      * @return boolean
      */
-    public boolean validate(T value) {
+    public final boolean validate(T value) {
         return this.validator.validate(value);
     }
 
@@ -128,7 +128,7 @@ public class ConfigurationParameter<T> {
     protected ConfigurationParameter<T> clone() {
         Cloner cloner = new Cloner();
         ConfigurationParameter<T> clone = new ConfigurationParameter<>(name, clazz, validator);
-        // only clone value as other values will are final
+        // only clone value as other values are final
         clone.value = cloner.deepClone(this.value);
         return clone;
     }
@@ -138,7 +138,7 @@ public class ConfigurationParameter<T> {
      * 
      * @return boolean
      */
-    public boolean hasValues() {
+    public final boolean hasValues() {
         return getValues() != null;
     }
 
@@ -148,7 +148,7 @@ public class ConfigurationParameter<T> {
      * @return T[]
      */
     @SuppressWarnings("unchecked")
-    public T[] getValues() {
+    public final T[] getValues() {
         if (clazz.isEnum()) {
             return clazz.getEnumConstants();
         } else if (clazz.isAssignableFrom(Boolean.class)) {
@@ -165,7 +165,7 @@ public class ConfigurationParameter<T> {
      * @return T
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private T convert(String valuestring) {
+    protected final T convert(String valuestring) {
 
         T value;
 
@@ -201,7 +201,7 @@ public class ConfigurationParameter<T> {
      * @param valuestring String
      * @return Boolean
      */
-    private Boolean convertBoolean(String valuestring) {
+    private final Boolean convertBoolean(String valuestring) {
         if (valuestring.equalsIgnoreCase(Boolean.TRUE.toString())
                 || valuestring.equalsIgnoreCase(Boolean.FALSE.toString())) {
             return Boolean.valueOf(valuestring);

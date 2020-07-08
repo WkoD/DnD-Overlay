@@ -19,21 +19,21 @@ public class ServerConfiguration extends Configuration {
     public static final ConfigurationParameter<String> SERVER_SERVLET_CONTEXT_PATH = new ConfigurationParameter<>(
             "server.servlet.context-path", String.class);
 
-    public static final ConfigurationParameter<Integer> IMAGE_SIZE_MIN_VISIBLE = new ConfigurationParameter<>(
+    public static final ScreenConfigurationParameter<Integer> IMAGE_SIZE_MIN_VISIBLE = new ScreenConfigurationParameter<>(
             "image.size.min.visible", Integer.class, INTEGER_POSITIVE);
-    public static final ConfigurationParameter<Double> IMAGE_SIZE_SCALE_ONLOAD = new ConfigurationParameter<>(
+    public static final ScreenConfigurationParameter<Double> IMAGE_SIZE_SCALE_ONLOAD = new ScreenConfigurationParameter<>(
             "image.size.scale.onload", Double.class, DOUBLE_POSITIVE);
-    public static final ConfigurationParameter<javafx.geometry.Pos> IMAGE_TEXT_POSITION = new ConfigurationParameter<>(
+    public static final ScreenConfigurationParameter<javafx.geometry.Pos> IMAGE_TEXT_POSITION = new ScreenConfigurationParameter<>(
             "image.text.position", javafx.geometry.Pos.class);
-    public static final ConfigurationParameter<Integer> IMAGE_TEXT_SIZE = new ConfigurationParameter<>(
+    public static final ScreenConfigurationParameter<Integer> IMAGE_TEXT_SIZE = new ScreenConfigurationParameter<>(
             "image.text.size", Integer.class, INTEGER_POSITIVE);
-    public static final ConfigurationParameter<Boolean> IMAGE_TRANSPARENCY = new ConfigurationParameter<>(
+    public static final ScreenConfigurationParameter<Boolean> IMAGE_TRANSPARENCY = new ScreenConfigurationParameter<>(
             "image.transparency", Boolean.class);
 
-    public static final ConfigurationParameter<javafx.geometry.Pos> BACKGROUND_TEXT_POSITION = new ConfigurationParameter<>(
+    public static final ScreenConfigurationParameter<javafx.geometry.Pos> BACKGROUND_TEXT_POSITION = new ScreenConfigurationParameter<>(
             "background.text.position", javafx.geometry.Pos.class);
-    public static final ConfigurationParameter<Integer> BACKGROUND_TEXT_SIZE = new ConfigurationParameter<>(
+    public static final ScreenConfigurationParameter<Integer> BACKGROUND_TEXT_SIZE = new ScreenConfigurationParameter<>(
             "background.text.size", Integer.class, INTEGER_POSITIVE);
-    public static final ConfigurationParameter<Boolean> BACKGROUND_TRANSPARENCY = new ConfigurationParameter<>(
+    public static final ScreenConfigurationParameter<Boolean> BACKGROUND_TRANSPARENCY = new ScreenConfigurationParameter<>(
             "background.transparency", Boolean.class);
 }

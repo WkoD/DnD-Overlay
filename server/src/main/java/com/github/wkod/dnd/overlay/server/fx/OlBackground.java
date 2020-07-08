@@ -18,17 +18,22 @@ import javafx.scene.text.Text;
 
 public class OlBackground extends StackPane {
 
+    private final int screenid;
+
     private final Text lblname;
 
     /**
      * Constructor.
      * 
-     * @param x      int
-     * @param y      int
-     * @param width  int
-     * @param height int
+     * @param screenid int
+     * @param x        int
+     * @param y        int
+     * @param width    int
+     * @param height   int
      */
-    public OlBackground(int x, int y, int width, int height) {
+    public OlBackground(int screenid, int x, int y, int width, int height) {
+        this.screenid = screenid;
+
         // basic configuration
         setLayoutX(x);
         setLayoutY(y);
@@ -40,12 +45,12 @@ public class OlBackground extends StackPane {
 
         // add name label
         lblname = new Text("");
-        lblname.setFont(new Font(ServerConfiguration.BACKGROUND_TEXT_SIZE.get()));
+        lblname.setFont(new Font(ServerConfiguration.BACKGROUND_TEXT_SIZE.get(this.screenid)));
         lblname.setStyle("-fx-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
         lblname.maxWidth(Double.MAX_VALUE);
         lblname.maxHeight(Double.MAX_VALUE);
 
-        StackPane.setAlignment(lblname, ServerConfiguration.BACKGROUND_TEXT_POSITION.get());
+        StackPane.setAlignment(lblname, ServerConfiguration.BACKGROUND_TEXT_POSITION.get(this.screenid));
         getChildren().add(lblname);
 
         setOpacity(1);
@@ -67,7 +72,7 @@ public class OlBackground extends StackPane {
         }
 
         // set image
-        if (ServerConfiguration.BACKGROUND_TRANSPARENCY.get()) {
+        if (ServerConfiguration.BACKGROUND_TRANSPARENCY.get(screenid)) {
             setBackground(
                     new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
                             BackgroundPosition.DEFAULT, new BackgroundSize(1.0, 1.0, true, true, false, true))));

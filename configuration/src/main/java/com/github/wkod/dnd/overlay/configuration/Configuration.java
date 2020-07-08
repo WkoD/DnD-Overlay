@@ -17,6 +17,8 @@ import com.github.wkod.dnd.overlay.localization.Messages;
 
 public abstract class Configuration {
 
+    public static final String LIST_DELIMITER = ",";
+
     /**
      * Properties file location.
      */
@@ -142,7 +144,8 @@ public abstract class Configuration {
         try {
             Field[] fields = clazz.getDeclaredFields();
             for (Field field : fields) {
-                if (field.getType().equals(ConfigurationParameter.class) && Modifier.isStatic(field.getModifiers())) {
+                if (ConfigurationParameter.class.isAssignableFrom(field.getType())
+                        && Modifier.isStatic(field.getModifiers())) {
                     list.add(((ConfigurationParameter<?>) field.get(null)));
                 }
             }
@@ -156,11 +159,11 @@ public abstract class Configuration {
     protected static ConfigurationValidator<Integer> INTEGER_POSITIVE = (Integer value) -> {
         return value > 0;
     };
-    
+
     protected static ConfigurationValidator<Integer> INTEGER_POSITIVE_ZERO = (Integer value) -> {
         return value >= 0;
     };
-    
+
     protected static ConfigurationValidator<Double> DOUBLE_POSITIVE = (Double value) -> {
         return value > 0.0;
     };

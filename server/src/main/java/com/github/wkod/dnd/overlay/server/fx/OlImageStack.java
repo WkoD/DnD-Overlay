@@ -54,7 +54,7 @@ public class OlImageStack extends StackPane {
         this.imagepane = imagepane;
         this.name = name;
 
-        if (!ServerConfiguration.IMAGE_TRANSPARENCY.get()) {
+        if (!ServerConfiguration.IMAGE_TRANSPARENCY.get(this.imagepane.getScreenid())) {
             setStyle("-fx-background-color: white; -fx-background-insets: 1 1 1 1;");
         }
 
@@ -66,12 +66,12 @@ public class OlImageStack extends StackPane {
         // add name label
         if (name != null) {
             lblname = new Text(name);
-            lblname.setFont(new Font(ServerConfiguration.IMAGE_TEXT_SIZE.get()));
+            lblname.setFont(new Font(ServerConfiguration.IMAGE_TEXT_SIZE.get(this.imagepane.getScreenid())));
             lblname.setStyle("-fx-fill: white; -fx-stroke: black; -fx-stroke-width: 1px;");
             lblname.maxWidth(Double.MAX_VALUE);
             lblname.maxHeight(Double.MAX_VALUE);
 
-            StackPane.setAlignment(lblname, ServerConfiguration.IMAGE_TEXT_POSITION.get());
+            StackPane.setAlignment(lblname, ServerConfiguration.IMAGE_TEXT_POSITION.get(this.imagepane.getScreenid()));
             getChildren().add(lblname);
         } else {
             lblname = null;
@@ -205,22 +205,26 @@ public class OlImageStack extends StackPane {
      */
     private void checkPosition() {
         // keep part of picture on screen
-        if (getBoundsInParent().getMinX() + ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get() > this.imagepane
-                .getWidth()) {
-            setLayoutX(this.imagepane.getWidth() - ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get()
-                    - (getBoundsInParent().getMinX() - getLayoutX()));
-        } else if (getBoundsInParent().getMaxX() < ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get()) {
-            setLayoutX(ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get() - getBoundsInParent().getWidth()
-                    - (getBoundsInParent().getMinX() - getLayoutX()));
+        if (getBoundsInParent().getMinX()
+                + ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get(imagepane.getScreenid()) > this.imagepane.getWidth()) {
+            setLayoutX(
+                    this.imagepane.getWidth() - ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get(imagepane.getScreenid())
+                            - (getBoundsInParent().getMinX() - getLayoutX()));
+        } else if (getBoundsInParent().getMaxX() < ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE
+                .get(imagepane.getScreenid())) {
+            setLayoutX(ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get(imagepane.getScreenid())
+                    - getBoundsInParent().getWidth() - (getBoundsInParent().getMinX() - getLayoutX()));
         }
 
-        if (getBoundsInParent().getMinY() + ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get() > this.imagepane
-                .getHeight()) {
-            setLayoutY(this.imagepane.getHeight() - ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get()
-                    - (getBoundsInParent().getMinY() - getLayoutY()));
-        } else if (getBoundsInParent().getMaxY() < ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get()) {
-            setLayoutY(ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get() - getBoundsInParent().getHeight()
-                    - (getBoundsInParent().getMinY() - getLayoutY()));
+        if (getBoundsInParent().getMinY() + ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE
+                .get(imagepane.getScreenid()) > this.imagepane.getHeight()) {
+            setLayoutY(
+                    this.imagepane.getHeight() - ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get(imagepane.getScreenid())
+                            - (getBoundsInParent().getMinY() - getLayoutY()));
+        } else if (getBoundsInParent().getMaxY() < ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE
+                .get(imagepane.getScreenid())) {
+            setLayoutY(ServerConfiguration.IMAGE_SIZE_MIN_VISIBLE.get(imagepane.getScreenid())
+                    - getBoundsInParent().getHeight() - (getBoundsInParent().getMinY() - getLayoutY()));
         }
     }
 
@@ -253,7 +257,8 @@ public class OlImageStack extends StackPane {
      * Scale image according to default value.
      */
     private void defaultScale() {
-        double defaultHeight = (imagepane.getHeight() * ServerConfiguration.IMAGE_SIZE_SCALE_ONLOAD.get());
+        double defaultHeight = (imagepane.getHeight()
+                * ServerConfiguration.IMAGE_SIZE_SCALE_ONLOAD.get(imagepane.getScreenid()));
         double relheightpercent = imageview.getImage().getHeight() / defaultHeight;
         double scalefactor = 1 / relheightpercent;
 
