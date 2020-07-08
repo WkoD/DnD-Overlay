@@ -134,25 +134,28 @@ public class ConfigurationParameter<T> {
     }
 
     /**
-     * True if the T class is an Enum, false otherwise.
+     * True if configuration has defined possible values, false otherwise.
      * 
      * @return boolean
      */
-    public boolean isTypeEnum() {
-        return clazz.isEnum();
+    public boolean hasValues() {
+        return getValues() != null;
     }
 
     /**
-     * Lists all possible Enum types if T class is an Enum, null otherwise.
+     * Lists all possible values, null if not limited.
      * 
      * @return T[]
      */
-    public T[] getEnumValues() {
-        if (!isTypeEnum()) {
+    @SuppressWarnings("unchecked")
+    public T[] getValues() {
+        if (clazz.isEnum()) {
+            return clazz.getEnumConstants();
+        } else if (clazz.isAssignableFrom(Boolean.class)) {
+            return (T[]) new Object[] { Boolean.TRUE, Boolean.FALSE };
+        } else {
             return null;
         }
-
-        return clazz.getEnumConstants();
     }
 
     /**
@@ -168,12 +171,7 @@ public class ConfigurationParameter<T> {
 
         try {
             if (clazz.isAssignableFrom(Boolean.class)) {
-                if (valuestring.equalsIgnoreCase(Boolean.TRUE.toString())
-                        || valuestring.equalsIgnoreCase(Boolean.FALSE.toString())) {
-                    value = (T) Boolean.valueOf(valuestring);
-                } else {
-                    throw new OlRuntimeException(Messages.CONFIGURATION_INVALID_BOOLEAN, valuestring, name);
-                }
+                value = (T) convertBoolean(valuestring);
             } else if (clazz.isAssignableFrom(Integer.class)) {
                 value = (T) Integer.valueOf(valuestring);
             } else if (clazz.isAssignableFrom(Double.class)) {
@@ -194,5 +192,21 @@ public class ConfigurationParameter<T> {
         }
 
         return value;
+    }
+
+    /**
+     * Convert String to Boolean value and throw exception for anything other than
+     * true or false (ignore case).
+     * 
+     * @param valuestring String
+     * @return Boolean
+     */
+    private Boolean convertBoolean(String valuestring) {
+        if (valuestring.equalsIgnoreCase(Boolean.TRUE.toString())
+                || valuestring.equalsIgnoreCase(Boolean.FALSE.toString())) {
+            return Boolean.valueOf(valuestring);
+        } else {
+            throw new OlRuntimeException(Messages.CONFIGURATION_INVALID_BOOLEAN, valuestring, name);
+        }
     }
 }

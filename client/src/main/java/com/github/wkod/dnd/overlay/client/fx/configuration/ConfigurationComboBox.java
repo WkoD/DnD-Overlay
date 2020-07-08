@@ -10,7 +10,7 @@ public class ConfigurationComboBox<T> extends ComboBox<T> implements Configurati
     private final ConfigurationParameter<T> configuration;
 
     public ConfigurationComboBox(ConfigurationParameter<T> configuration) {
-        super(FXCollections.observableArrayList(configuration.getEnumValues()));
+        super(FXCollections.observableArrayList(configuration.getValues()));
         this.configuration = configuration;
 
         setValue(this.configuration.get());

@@ -125,7 +125,7 @@ public class ConfigurationWindow extends Stage {
      * @return Control
      */
     private Control getNode(ConfigurationParameter<?> element) {
-        if (element.isTypeEnum()) {
+        if (element.hasValues()) {
             ConfigurationComboBox<?> value = new ConfigurationComboBox<>(element);
             valuelist.add(value);
             return value;
