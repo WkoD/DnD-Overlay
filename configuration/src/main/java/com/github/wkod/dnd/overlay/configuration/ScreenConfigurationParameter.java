@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.github.wkod.dnd.overlay.exception.OlRuntimeException;
 import com.github.wkod.dnd.overlay.localization.Messages;
@@ -12,8 +13,8 @@ import com.rits.cloning.Cloner;
 public class ScreenConfigurationParameter<T> extends ConfigurationParameter<T> {
 
     /**
-     * Map with additional configurations per screen (index start at 0).
-     * Default value (super.value) is not part of this map.
+     * Map with additional configurations per screen (index start at 0). Default
+     * value (super.value) is not part of this map.
      */
     private final Map<Integer, T> map = new LinkedHashMap<>();
 
@@ -53,7 +54,10 @@ public class ScreenConfigurationParameter<T> extends ConfigurationParameter<T> {
             throw new OlRuntimeException(Messages.CONFIGURATION_INVALID, String.valueOf(value));
         }
 
-        map.put(index, value);
+        // only set if different from default value
+        if (!Objects.equals(get(), value)) {
+            map.put(index, value);
+        }
     }
 
     @Override
@@ -72,40 +76,16 @@ public class ScreenConfigurationParameter<T> extends ConfigurationParameter<T> {
         return true;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
+    public String toString(int index) {
+        return String.valueOf(get(index));
+    }
 
-        List<String> list = new ArrayList<>();
-        
-        for (Map.Entry<Integer, T> entry : map.entrySet()) {
-            if (list.size() > entry.getKey()) {
-                list.set(entry.getKey(), String.valueOf(entry.getValue()));
-            } else {
-                for (int i = entry.getKey() - list.size(); i > 0; --i) {
-                    list.add(null);
-                }
-                
-                list.add(String.valueOf(entry.getValue()));
-            }
-        }
-        
-        // add default value
-        sb.append(super.toString());
-        
-        for (String v : list) {
-            sb.append(Configuration.LIST_DELIMITER);
-            
-            if (v != null) {
-                sb.append(v);
-            }
-        }
-
-        return sb.toString();
+    public void fromString(String valuestring, int index) {
+        set(super.convert(valuestring), index);
     }
 
     @Override
-    public void fromString(String valuestring) {
+    public void load(String valuestring) {
         if (valuestring == null) {
             throw new OlRuntimeException(Messages.CONFIGURATION_INVALID, valuestring, name);
         }
@@ -114,7 +94,7 @@ public class ScreenConfigurationParameter<T> extends ConfigurationParameter<T> {
         map.clear();
 
         // set default value
-        super.fromString(vsplit[0]);
+        super.load(vsplit[0]);
 
         // set additional values
         for (int i = 1; i < vsplit.length; ++i) {
@@ -123,9 +103,41 @@ public class ScreenConfigurationParameter<T> extends ConfigurationParameter<T> {
             // set only non placeholder values
             if (v != null && !"".equals(v)) {
                 // screen index start at 0
-                map.put(i - 1, super.convert(v));
+                fromString(v, i - 1);
             }
         }
+    }
+
+    @Override
+    public String save() {
+        StringBuilder sb = new StringBuilder();
+
+        List<String> list = new ArrayList<>();
+
+        for (Integer index : map.keySet()) {
+            if (list.size() > index) {
+                list.set(index, toString(index));
+            } else {
+                for (int i = index - list.size(); i > 0; --i) {
+                    list.add(null);
+                }
+
+                list.add(toString(index));
+            }
+        }
+
+        // add default value
+        sb.append(super.save());
+
+        for (String v : list) {
+            sb.append(Configuration.LIST_DELIMITER);
+
+            if (v != null) {
+                sb.append(v);
+            }
+        }
+
+        return sb.toString();
     }
 
     @Override

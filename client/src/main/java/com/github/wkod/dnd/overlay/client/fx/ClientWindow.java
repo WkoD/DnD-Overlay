@@ -32,7 +32,7 @@ public class ClientWindow extends Stage {
 
     private final List<OlScreenBox> screenBoxList = new ArrayList<>();
     private final HBox screenBoxPane;
-    
+
     private final TextArea console;
 
     public ClientWindow() {
@@ -60,7 +60,7 @@ public class ClientWindow extends Stage {
         if (ClientConfiguration.UPDATE_SCREEN_STARTUP.get()) {
             updateScreenListPane();
         }
-        
+
         setMinWidth(600d);
         setMinHeight(400d);
     }
@@ -119,13 +119,13 @@ public class ClientWindow extends Stage {
         });
 
         client.setOnAction(e -> {
-            ConfigurationWindow configwindow = new ConfigurationWindow(ClientConfiguration.class);
+            ConfigurationWindow configwindow = new ConfigurationWindow(ClientConfiguration.class, screenBoxList.size());
             configwindow.show();
             e.consume();
         });
-        
+
         server.setOnAction(e -> {
-            ConfigurationWindow configwindow = new ConfigurationWindow(ServerConfiguration.class);
+            ConfigurationWindow configwindow = new ConfigurationWindow(ServerConfiguration.class, screenBoxList.size());
             configwindow.show();
             e.consume();
         });

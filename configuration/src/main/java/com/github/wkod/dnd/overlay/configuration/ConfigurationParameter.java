@@ -102,7 +102,7 @@ public class ConfigurationParameter<T> {
      * @return String
      */
     @Override
-    public String toString() {
+    public final String toString() {
         return String.valueOf(value);
     }
 
@@ -111,12 +111,30 @@ public class ConfigurationParameter<T> {
      * 
      * @param valuestring String
      */
-    public void fromString(String valuestring) {
+    public final void fromString(String valuestring) {
         if (valuestring == null) {
             throw new OlRuntimeException(Messages.CONFIGURATION_INVALID, valuestring, name);
         }
 
         set(convert(valuestring));
+    }
+    
+    /**
+     * Read String into value.
+     * 
+     * @param valuestring String
+     */
+    public void load(String valuestring) {
+        fromString(valuestring);
+    }
+    
+    /**
+     * Save value into String.
+     * 
+     * @return String
+     */
+    public String save() {
+        return toString();
     }
 
     /**

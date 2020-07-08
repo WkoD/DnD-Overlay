@@ -1,6 +1,7 @@
 package com.github.wkod.dnd.overlay.server.rest;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.wkod.dnd.overlay.api.OlConfiguration;
 import com.github.wkod.dnd.overlay.api.OlData;
 import com.github.wkod.dnd.overlay.api.OlScreen;
 import com.github.wkod.dnd.overlay.exception.OlException;
@@ -29,12 +29,12 @@ public class Controller {
     }
 
     @GetMapping("/configuration")
-    public List<OlConfiguration> getConfiguration() throws OlException {
+    public Map<String, String> getConfiguration() throws OlException {
         return service.getConfiguration();
     }
 
     @PostMapping(value = { "/configuration", "/configuration/save" })
-    public void setConfiguration(@RequestBody(required = true) List<OlConfiguration> configuration,
+    public void setConfiguration(@RequestBody(required = true) Map<String, String> configuration,
             HttpServletRequest request) throws OlException {
 
         service.setConfiguration(configuration);

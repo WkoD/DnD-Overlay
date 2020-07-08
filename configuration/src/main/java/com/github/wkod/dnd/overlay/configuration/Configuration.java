@@ -9,7 +9,9 @@ import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import com.github.wkod.dnd.overlay.exception.OlRuntimeException;
@@ -17,6 +19,9 @@ import com.github.wkod.dnd.overlay.localization.Messages;
 
 public abstract class Configuration {
 
+    /**
+     * Delimiter for configurations with multiple values.
+     */
     public static final String LIST_DELIMITER = ",";
 
     /**
@@ -57,23 +62,29 @@ public abstract class Configuration {
             throw new OlRuntimeException(Messages.CONFIGURATION_ERROR, e);
         }
 
-        load(properties, clazz);
+        Map<String, String> map = new HashMap<>();
+
+        for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+            map.put((String) entry.getKey(), (String) entry.getValue());
+        }
+
+        fromMap(map, clazz);
     }
 
     /**
-     * Read configuration from properties.
+     * Read configuration from String map.
      * 
-     * @param properties Properties
+     * @param properties Map<String, String>
      * @param clazz      Class<? extends Configuration>
      */
-    public static void load(Properties properties, Class<? extends Configuration> clazz) {
+    public static void fromMap(Map<String, String> properties, Class<? extends Configuration> clazz) {
         // set and check values
         List<ConfigurationParameter<?>> list = values(clazz);
 
         for (ConfigurationParameter<?> config : list) {
             if (properties.containsKey(config.name())) {
                 // set only known config values
-                config.fromString((String) properties.get(config.name()));
+                config.load((String) properties.get(config.name()));
             } else {
                 // validate current value if none is given
                 // NOTE this is done so no configuration value
@@ -81,6 +92,23 @@ public abstract class Configuration {
                 config.validate();
             }
         }
+    }
+
+    /**
+     * Return all configuration parameters as String map.
+     * 
+     * @param clazz
+     * @return Map<String, String>
+     */
+    public static Map<String, String> toMap(Class<? extends Configuration> clazz) {
+        Map<String, String> map = new HashMap<>();
+        List<ConfigurationParameter<?>> list = values(clazz);
+
+        for (ConfigurationParameter<?> config : list) {
+            map.put(config.name(), config.save());
+        }
+
+        return map;
     }
 
     /**
@@ -95,12 +123,8 @@ public abstract class Configuration {
             return;
         }
 
-        List<ConfigurationParameter<?>> list = values(clazz);
         Properties properties = new Properties();
-
-        for (ConfigurationParameter<?> config : list) {
-            properties.setProperty(config.name(), config.toString());
-        }
+        properties.putAll(toMap(clazz));
 
         // delete old properties file
         if (propertiesfile.exists()) {
@@ -126,6 +150,7 @@ public abstract class Configuration {
 
         List<ConfigurationParameter<?>> list = values(clazz);
         for (ConfigurationParameter<?> parameter : list) {
+            // only set default value
             properties.setProperty(parameter.name(), parameter.toString());
         }
 

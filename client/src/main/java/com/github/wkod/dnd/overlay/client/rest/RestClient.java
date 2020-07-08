@@ -5,7 +5,7 @@ import static com.github.wkod.dnd.overlay.localization.Messages.*;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -17,12 +17,10 @@ import javax.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientConfig;
 import org.slf4j.cal10n.LocLogger;
 
-import com.github.wkod.dnd.overlay.api.OlConfiguration;
 import com.github.wkod.dnd.overlay.api.OlData;
 import com.github.wkod.dnd.overlay.api.OlDataType;
 import com.github.wkod.dnd.overlay.api.OlScreen;
 import com.github.wkod.dnd.overlay.configuration.ClientConfiguration;
-import com.github.wkod.dnd.overlay.configuration.ConfigurationParameter;
 import com.github.wkod.dnd.overlay.configuration.ServerConfiguration;
 import com.github.wkod.dnd.overlay.util.LogUtils;
 
@@ -56,17 +54,11 @@ public class RestClient {
             Client client = getClient();
             WebTarget target = client.target(getTarget() + "/configuration");
 
-            List<OlConfiguration> configuration = target.request(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON).get(new GenericType<List<OlConfiguration>>() {
+            Map<String, String> configuration = target.request(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON).get(new GenericType<Map<String, String>>() {
                     });
 
-            Properties properties = new Properties();
-
-            for (OlConfiguration parameter : configuration) {
-                properties.put(parameter.getName(), parameter.getValue());
-            }
-
-            ServerConfiguration.load(properties, ServerConfiguration.class);
+            ServerConfiguration.fromMap(configuration, ServerConfiguration.class);
         } catch (Exception e) {
             LOGGER.error(CLIENT_DATA_TRANSFER_ERROR, e);
         }
@@ -74,21 +66,11 @@ public class RestClient {
 
     public static void setConfiguration(boolean save) {
         try {
-            List<ConfigurationParameter<?>> configuration = ServerConfiguration.values(ServerConfiguration.class);
-            List<OlConfiguration> list = new ArrayList<>();
-
-            for (ConfigurationParameter<?> parameter : configuration) {
-                OlConfiguration olc = new OlConfiguration();
-                olc.setName(parameter.name());
-                olc.setValue(parameter.toString());
-                list.add(olc);
-            }
-
             Client client = getClient();
             WebTarget target = client.target(getTarget() + "/configuration" + (save ? "/save" : ""));
 
-            target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).post(Entity.json(list),
-                    List.class);
+            target.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                    .post(Entity.json(ServerConfiguration.toMap(ServerConfiguration.class)), Map.class);
         } catch (Exception e) {
             LOGGER.error(CLIENT_DATA_TRANSFER_ERROR, e);
         }

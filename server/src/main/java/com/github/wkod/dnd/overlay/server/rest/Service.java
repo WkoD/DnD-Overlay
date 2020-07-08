@@ -1,14 +1,11 @@
 package com.github.wkod.dnd.overlay.server.rest;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 
-import com.github.wkod.dnd.overlay.api.OlConfiguration;
 import com.github.wkod.dnd.overlay.api.OlScreen;
-import com.github.wkod.dnd.overlay.configuration.ConfigurationParameter;
 import com.github.wkod.dnd.overlay.configuration.ServerConfiguration;
 import com.github.wkod.dnd.overlay.server.fx.ServerFx;
 
@@ -19,28 +16,12 @@ public class Service {
         return ServerFx.getScreens();
     }
 
-    public List<OlConfiguration> getConfiguration() {
-        List<ConfigurationParameter<?>> values = ServerConfiguration.values(ServerConfiguration.class);
-        List<OlConfiguration> configuration = new ArrayList<>();
-
-        for (ConfigurationParameter<?> parameter : values) {
-            OlConfiguration olc = new OlConfiguration();
-            olc.setName(parameter.name());
-            olc.setValue(parameter.toString());
-            configuration.add(olc);
-        }
-
-        return configuration;
+    public Map<String, String> getConfiguration() {
+        return ServerConfiguration.toMap(ServerConfiguration.class);
     }
 
-    public void setConfiguration(List<OlConfiguration> configuration) {
-        Properties properties = new Properties();
-
-        for (OlConfiguration parameter : configuration) {
-            properties.put(parameter.getName(), parameter.getValue());
-        }
-
-        ServerConfiguration.load(properties, ServerConfiguration.class);
+    public void setConfiguration(Map<String, String> configuration) {
+        ServerConfiguration.fromMap(configuration, ServerConfiguration.class);
     }
 
     public void saveConfiguration() {
