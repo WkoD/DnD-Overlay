@@ -17,7 +17,7 @@ public class ScreenMenuItem extends CheckMenuItem {
      * @param screenbox OlScreenBox
      */
     public ScreenMenuItem(OlScreenBox screenbox) {
-        super(CLIENT_SCREENS_SCREEN.localize(screenbox.getId()));
+        super(CLIENT_VIEW_SCREEN.localize(screenbox.getId()));
         this.screenbox = screenbox;
 
         setId(screenbox.getId());

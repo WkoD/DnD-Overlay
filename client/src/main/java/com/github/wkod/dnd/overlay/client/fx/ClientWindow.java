@@ -15,6 +15,7 @@ import com.github.wkod.dnd.overlay.configuration.ServerConfiguration;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -27,7 +28,7 @@ import javafx.stage.Stage;
 
 public class ClientWindow extends Stage {
 
-    private Menu screensmenu;
+    private Menu viewmenu;
     private int screensmenudefaultitems;
 
     private final List<OlScreenBox> screenBoxList = new ArrayList<>();
@@ -69,11 +70,9 @@ public class ClientWindow extends Stage {
         // create menu elements
         Menu menu = new Menu(CLIENT_MENU.localize());
         MenuItem readscreens = new MenuItem(CLIENT_MENU_READ_SCREENS.localize());
-        MenuItem toggleconsole = new MenuItem(CLIENT_MENU_TOGGLE_CONSOLE.localize());
         MenuItem exit = new MenuItem(CLIENT_MENU_EXIT.localize());
 
         menu.getItems().add(readscreens);
-        menu.getItems().add(toggleconsole);
         menu.getItems().add(exit);
 
         Menu configuration = new Menu(CLIENT_CONFIGURATION.localize());
@@ -83,29 +82,23 @@ public class ClientWindow extends Stage {
         configuration.getItems().add(client);
         configuration.getItems().add(server);
 
-        screensmenu = new Menu(CLIENT_SCREENS.localize());
-        MenuItem allscreens = new MenuItem(CLIENT_SCREENS_ALL.localize());
+        viewmenu = new Menu(CLIENT_VIEW.localize());
+        CheckMenuItem toggleconsole = new CheckMenuItem(CLIENT_VIEW_CONSOLE.localize());
+        toggleconsole.setSelected(true);
 
-        screensmenu.getItems().add(allscreens);
-        screensmenu.getItems().add(new SeparatorMenuItem());
-        screensmenudefaultitems = screensmenu.getItems().size();
+        viewmenu.getItems().add(toggleconsole);
+        viewmenu.getItems().add(new SeparatorMenuItem());
+        screensmenudefaultitems = viewmenu.getItems().size();
 
         // create menu bar
         MenuBar menubar = new MenuBar();
         menubar.getMenus().add(menu);
         menubar.getMenus().add(configuration);
-        menubar.getMenus().add(screensmenu);
+        menubar.getMenus().add(viewmenu);
 
         // set events
         readscreens.setOnAction(e -> {
             updateScreenListPane();
-            e.consume();
-        });
-
-        toggleconsole.setOnAction(e -> {
-            boolean togglestate = !console.isVisible();
-            console.setManaged(togglestate);
-            console.setVisible(togglestate);
             e.consume();
         });
 
@@ -129,13 +122,11 @@ public class ClientWindow extends Stage {
             configwindow.show();
             e.consume();
         });
-
-        allscreens.setOnAction(e -> {
-            for (MenuItem item : screensmenu.getItems()) {
-                if (item instanceof ScreenMenuItem) {
-                    ((ScreenMenuItem) item).enable();
-                }
-            }
+        
+        toggleconsole.setOnAction(e -> {
+            boolean togglestate = toggleconsole.isSelected();
+            console.setManaged(togglestate);
+            console.setVisible(togglestate);
             e.consume();
         });
 
@@ -157,8 +148,8 @@ public class ClientWindow extends Stage {
         screenBoxPane.getChildren().clear();
 
         // remove screens from menu
-        if (screensmenu.getItems().size() > screensmenudefaultitems) {
-            screensmenu.getItems().remove(screensmenudefaultitems + 1, screensmenu.getItems().size());
+        if (viewmenu.getItems().size() > screensmenudefaultitems) {
+            viewmenu.getItems().remove(screensmenudefaultitems + 1, viewmenu.getItems().size());
         }
 
         List<OlScreen> list = RestClient.getScreens();
@@ -177,7 +168,7 @@ public class ClientWindow extends Stage {
             screenBoxList.add(pane);
 
             // add screen to menu
-            screensmenu.getItems().add(new ScreenMenuItem(pane));
+            viewmenu.getItems().add(new ScreenMenuItem(pane));
         }
     }
 
