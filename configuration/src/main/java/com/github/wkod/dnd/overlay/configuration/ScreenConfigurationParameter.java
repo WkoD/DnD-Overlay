@@ -54,8 +54,11 @@ public class ScreenConfigurationParameter<T> extends ConfigurationParameter<T> {
             throw new OlRuntimeException(Messages.CONFIGURATION_INVALID, String.valueOf(value));
         }
 
-        // only set if different from default value
-        if (!Objects.equals(get(), value)) {
+        if (Objects.equals(get(), value)) {
+            // remove possible old value if same value as default
+            map.remove(index);
+        } else {
+            // save if other value as default
             map.put(index, value);
         }
     }
